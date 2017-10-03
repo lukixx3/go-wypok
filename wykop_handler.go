@@ -37,44 +37,26 @@ func (wh *WykopHandler) LoginToWypok() {
 	}
 }
 
-func (wh *WykopHandler) UpvoteEntries(entries TagsEntries) {
-	for i := range entries.Items {
-		lastEntry := entries.Items[len(entries.Items)-1-i]
-
-		if lastEntry.Vote_count >= 10 {
-			go wh.UpvoteEntry(lastEntry)
-		}
-	}
-}
-
-func (wh *WykopHandler) UpvoteEntry(entry Entry) VoteResponse {
+func (wh *WykopHandler) UpvoteEntry(entry Entry) (voteResponse VoteResponse, wypokError *WykopError) {
 	urlAddress := getEntryVoteUrl("entry", strconv.Itoa(entry.Id), "") + "/appkey/" + wh.appKey + "/userkey/" + wh.authResponse.Userkey
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
 
-	voteResponse := VoteResponse{}
+	voteResponse = VoteResponse{}
+	wypokError = wh.getObjectFromJson(responseBody, &voteResponse)
 
-	wypokError := wh.getObjectFromJson(responseBody, &voteResponse)
-	if wypokError != nil {
-		panic(wypokError.ErrorObject.Message)
-	}
-
-	return voteResponse
+	return
 }
 
-func (wh *WykopHandler) GetEntriesFromTag(tag string, page int) TagsEntries {
+func (wh *WykopHandler) GetEntriesFromTag(tag string, page int) (tagEntries TagsEntries, wypokError *WykopError) {
 	urlAddress := getTagEntries(tag) + "/appkey/" + wh.appKey + "/page/" + strconv.Itoa(page)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
 
 	entries := TagsEntries{}
+	wypokError = wh.getObjectFromJson(responseBody, &entries)
 
-	wypokError := wh.getObjectFromJson(responseBody, &entries)
-	if wypokError != nil {
-		panic(wypokError.ErrorObject.Message)
-	}
-
-	return entries
+	return
 }
 
 func (wh *WykopHandler) sendPostRequestForBody(address string) string {
@@ -113,78 +95,61 @@ func (wh *WykopHandler) sendGetRequestForBody(address string) string {
 	return bodyResp
 }
 
-func (wh *WykopHandler) GetProfileEntries(username string, page int) []Entry {
+func (wh *WykopHandler) GetProfileEntries(username string, page int) (entries []Entry, wypokError *WykopError) {
 	urlAddress := getProfileEntriesUrl(username) + "/appkey/" + wh.appKey + "/userkey/" + wh.authResponse.Userkey + "/page/" + strconv.Itoa(page)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).
 		End()
 
-	entries := []Entry{}
+	entries = []Entry{}
+	wypokError = wh.getObjectFromJson(responseBody, &entries)
 
-	wypokError := wh.getObjectFromJson(responseBody, &entries)
-	if wypokError != nil {
-		panic(wypokError.ErrorObject.Message)
-	}
-
-	return entries
+	return
 }
 
-func (wh *WykopHandler) GetEntriesComments(username string, page int) []EntryComment {
+func (wh *WykopHandler) GetEntriesComments(username string, page int) (comments []EntryComment, wypokError *WykopError) {
 	urlAddress := getEntriesCommentsUrl(username) + "/appkey/" + wh.appKey + "/userkey/" + wh.authResponse.Userkey + "/page/" + strconv.Itoa(page)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
 
-	comments := []EntryComment{}
+	comments = []EntryComment{}
+	wypokError = wh.getObjectFromJson(responseBody, &comments)
 
-	wypokError := wh.getObjectFromJson(responseBody, &comments)
-	if wypokError != nil {
-		panic(wypokError.ErrorObject.Message)
-	}
-
-	return comments
+	return
 }
 
-func (wh *WykopHandler) DeleteEntryComment(entryId string, commentId string) {
+func (wh *WykopHandler) DeleteEntryComment(entryId string, commentId string) (wypokError *WykopError) {
 	urlAddress := getDeleteCommentUrl(entryId, commentId) + "/appkey/" + wh.appKey + "/userkey/" + wh.authResponse.Userkey
 
 	responseBody := wh.sendPostRequestForBody(urlAddress)
 
 	commentResponse := CommentResponse{}
-	wypokError := wh.getObjectFromJson(responseBody, &commentResponse)
-	if wypokError != nil {
-		panic(wypokError.ErrorObject.Message)
-	}
+	wypokError = wh.getObjectFromJson(responseBody, &commentResponse)
+
+	return
 }
 
-func (wh *WykopHandler) DeleteEntry(id string) EntryResponse {
+func (wh *WykopHandler) DeleteEntry(id string) (entryResponse EntryResponse, wypokError *WykopError) {
 	urlAddress := getDeleteEntryUrl(id) + "/appkey/" + wh.appKey + "/userkey/" + wh.authResponse.Userkey
 
 	responseBody := wh.sendPostRequestForBody(urlAddress)
 
-	entry := EntryResponse{}
+	entryResponse = EntryResponse{}
+	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
 
-	wypokError := wh.getObjectFromJson(responseBody, &entry)
-	if wypokError != nil {
-		panic(wypokError.ErrorObject.Message)
-	}
-
-	return entry
+	return
 }
 
-func (wh *WykopHandler) GetEntry(id int) Entry {
+func (wh *WykopHandler) GetEntry(id int) (entry Entry, wypokError *WykopError) {
 	responseBody := wh.sendPostRequestForBody(getEntryUrl(strconv.Itoa(id)))
 
-	entry := Entry{}
+	entry = Entry{}
+	wypokError = wh.getObjectFromJson(responseBody, &entry)
 
-	wypokError := wh.getObjectFromJson(responseBody, &entry)
-	if wypokError != nil {
-		panic(wypokError.ErrorObject.Message)
-	}
-
-	return entry
+	return
 }
 
-func (wh *WykopHandler) PostEntry(content *string) EntryResponse {
+func (wh *WykopHandler) PostEntry(content *string) (entryResponse EntryResponse, wypokError *WykopError) {
 	body := url.Values{}
 	body.Set("body", *content)
 
@@ -196,17 +161,13 @@ func (wh *WykopHandler) PostEntry(content *string) EntryResponse {
 		Send(body).
 		End()
 
-	entry := EntryResponse{}
+	entryResponse = EntryResponse{}
+	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
 
-	wypokError := wh.getObjectFromJson(responseBody, &entry)
-	if wypokError != nil {
-		panic(wypokError.ErrorObject.Message)
-	}
-
-	return entry
+	return
 }
 
-func (wh *WykopHandler) GetProfile(username string) Profile {
+func (wh *WykopHandler) GetProfile(username string) (profile Profile, wypokError *WykopError) {
 	urlAddress := getProfileUrl(username) + "/appkey/" + wh.appKey
 
 	_, responseBody, _ := gorequest.New().Get(urlAddress).
@@ -214,14 +175,10 @@ func (wh *WykopHandler) GetProfile(username string) Profile {
 		Set("apisign", wh.hashRequest(urlAddress)).
 		End()
 
-	profile := Profile{}
+	profile = Profile{}
+	wypokError = wh.getObjectFromJson(responseBody, &profile)
 
-	wypokError := wh.getObjectFromJson(responseBody, &profile)
-	if wypokError != nil {
-		panic(wypokError.ErrorObject.Message)
-	}
-
-	return profile
+	return
 }
 
 func (wh *WykopHandler) getObjectFromJson(bodyReader string, target interface{}) *WykopError {

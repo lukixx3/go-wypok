@@ -10,7 +10,7 @@ type Profile struct {
 	Name            string
 	Www             string
 	Jabber          string
-	Gg              int
+	Gg              int `json:"-"`
 	City            string
 	About           string
 	AuthorGroup     int `json:"author_group"`

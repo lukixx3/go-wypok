@@ -243,3 +243,15 @@ func (wh *WykopHandler) hashRequest(address string) string {
 	hash := md5.Sum([]byte(mString))
 	return hex.EncodeToString(hash[:])
 }
+
+func (w *WykopHandler) SetAppKey(appKey string) {
+	w.appKey = appKey
+}
+
+func (w *WykopHandler) SetSecret(secret string) {
+	w.secret = secret
+}
+
+func (w *WykopHandler) SetConnectionKey(connectionKey string) {
+	w.connectionKey = connectionKey
+}

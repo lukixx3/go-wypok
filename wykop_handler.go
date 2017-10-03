@@ -1,4 +1,4 @@
-package Wykop
+package go_wypok
 
 import (
 	"crypto/md5"

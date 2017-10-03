@@ -1,4 +1,4 @@
-package Wykop
+package go_wypok
 
 const (
 	LOGIN_URL        = "https://a.wykop.pl/user/login"

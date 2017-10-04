@@ -1,6 +1,8 @@
 package go_wypok
 
-import "time"
+import (
+	"time"
+)
 
 type Profile struct {
 	ID              int64
@@ -34,64 +36,115 @@ type Profile struct {
 	IsObserved      bool   `json:"is_observed"`
 }
 
-type Entry struct {
-	Id                  int
-	Author              string
-	Author_avatar       string
-	Author_avatar_big   string
-	Author_avatar_med   string
-	Author_avatar_lo    string
-	Author_group        int
-	Author_sex          string
-	Date                WypokShitDate `json:"date"`
-	Body                string
-	Source              string
-	Url                 string
-	Receiver            string
-	Receiver_avatar     string
-	Receiver_avatar_big string
-	Receiver_avatar_med string
-	Receiver_avatar_lo  string
-	Receiver_group      string
-	Receiver_sex        string
-	Comments            []EntryComment
-	Blocked             bool
-	Vote_count          int
-	User_vote           int
-	Voters              []Voter
-	User_favorite       bool
-	TypeE               string `json:"type"`
-	Embed               Embed
-	Deleted             bool
-	Violation_url       string
-	Can_comment         bool
-	App                 string
-	Comment_count       int
+type Link struct {
+	Id              int
+	Title           string
+	Description     string
+	Tags            string
+	Url             string
+	SourceUrl       string        `json:"source_url"`
+	VoteCount       int           `json:"vote_count"`
+	CommentCount    int           `json:"comment_count"`
+	ReportCount     int           `json:"report_count"`
+	Date            WypokShitDate `json:"date"`
+	Author          string
+	AuthorAvatar    string `json:"avatar_avatar"`
+	AuthorAvatarMed string `json:"avatar_med"`
+	AuthorAvatarLo  string `json:"avatar_lo"`
+	AuthorGroup     int    `json:"author_group"`
+	AuthorSex       string `json:"author_sex"`
+	Preview         string
+	UserLists       []int `json:"user_lists"`
+	Plus18          bool  `json:"plus_18"`
+	Status          string
+	CanVote         bool `json:"can_vote"`
+	IsHot           bool `json:"is_hot"`
+	HasOwnContent   bool `json:"has_own_content"`
+	Category        string
+	CategoryName    string            `json:"category_name,omitempty"`
+	UserVote        WykopShitUserVote `json:"user_vote,omitempty"`
+	UserObserve     bool              `json:"user_observe,omitempty"`
+	UserFavorite    bool              `json:"user_favorite,omitempty"`
 }
 
-type EntryComment struct {
+type WykopShitUserVote string
+
+// when user is NOT logged in, user_vote field will not be provided
+// when user is logged in, user_vote might have value of "bury" or "dig"
+// if user made such action in the past, however, when user didn't vote
+// on the link wypok.pl provides user_vote as false (see no quotes), which
+// golang unmarshaller tries to read as `bool` not `string` and panics.
+// This wrapper type ensures that bool will be converted to string and string treated as string.
+func (value *WykopShitUserVote) UnmarshalJSON(data []byte) error {
+	asString := string(data)
+	if asString == "dig" {
+		*value = "dig"
+	} else if asString == "bury" {
+		*value = "bury"
+	} else {
+		*value = "false"
+	}
+	return nil
+}
+
+type Entry struct {
 	Id                int
 	Author            string
-	Author_avatar     string
-	Author_avatar_big string
-	Author_avatar_med string
-	Author_avatar_lo  string
-	Author_group      int
-	Author_sex        string
+	AuthorAvatar      string        `json:"author_avatar"`
+	AuthorAvatarBig   string        `json:"author_big"`
+	AuthorAvatarMed   string        `json:"author_med"`
+	AuthorAvatarLo    string        `json:"author_lo"`
+	AuthorGroup       int           `json:"author_group"`
+	AuthorSex         string        `json:"author_sex"`
 	Date              WypokShitDate `json:"date"`
 	Body              string
 	Source            string
-	Entry_id          int
+	Url               string
+	Receiver          string
+	ReceiverAvatar    string `json:"receiver_avatar"`
+	ReceiverAvatarBig string `json:"receiver_avatar_big"`
+	ReceiverAvatarMed string `json:"receiver_avatar_med"`
+	ReceiverAvatarLo  string `json:"receiver_avatar_lo"`
+	ReceiverGroup     string `json:"receiver_group"`
+	ReceiverSex       string `json:"receiver_sex"`
+	Comments          []EntryComment
 	Blocked           bool
-	Deleted           bool
-	Vote_count        int
-	User_vote         int
+	VoteCount         int `json:"vote_count"`
+	UserVote          int `json:"user_vote"`
 	Voters            []Voter
+	UserFavorite      bool   `json:"user_favorite"`
+	TypeE             string `json:"type"`
 	Embed             Embed
-	Entry             Entry
-	Type              string
+	Deleted           bool
+	ViolationUrl      string `json:"violation_url"`
+	CanComment        bool   `json:"can_comment"`
 	App               string
-	Violation_url     string
+	CommentCount      int `json:"comment_count"`
+}
+
+type EntryComment struct {
+	Id              int
+	Author          string
+	AuthorAvatar    string        `json:"author_avatar"`
+	AuthorAvatarBig string        `json:"author_big"`
+	AuthorAvatarMed string        `json:"author_med"`
+	AuthorAvatarLo  string        `json:"author_lo"`
+	AuthorGroup     int           `json:"author_group"`
+	AuthorSex       string        `json:"author_sex"`
+	Date            WypokShitDate `json:"date"`
+	Body            string
+	Source          string
+	EntryId         int `json:"entry_id"`
+	Blocked         bool
+	Deleted         bool
+	VoteCount       int `json:"vote_count"`
+	UserVote        int `json:"user_vote"`
+	Voters          []Voter
+	Embed           Embed
+	Entry           Entry
+	Type            string
+	App             string
+	ViolationUrl    string `json:"violation_url"`
 }
 
 type WypokShitDate struct {
@@ -116,14 +169,14 @@ func (self *WypokShitDate) UnmarshalJSON(b []byte) (err error) {
 }
 
 type Voter struct {
-	Author            string
-	Author_group      int
-	author_avatar     string
-	author_avatar_big string
-	author_avatar_med string
-	author_avatar_lo  string
-	author_sex        string
-	date              string
+	Author          string
+	AuthorAvatar    string        `json:"author_avatar"`
+	AuthorAvatarBig string        `json:"author_big"`
+	AuthorAvatarMed string        `json:"author_med"`
+	AuthorAvatarLo  string        `json:"author_lo"`
+	AuthorSex       string        `json:"author_sex"`
+	AuthorGroup     int           `json:"author_group"`
+	Date            WypokShitDate `json:"date"`
 }
 
 type Embed struct {
@@ -131,7 +184,7 @@ type Embed struct {
 	Preview   string
 	Url       string
 	Source    string
-	Plus18    bool
+	Plus18    bool `json:"plus_18"`
 }
 
 type TagsEntries struct {
@@ -140,10 +193,10 @@ type TagsEntries struct {
 }
 
 type Meta struct {
-	Tags        string
-	Is_Observed bool
-	Is_Blocked  bool
-	Counters    Counters
+	Tags       string
+	IsObserved bool `json:"is_observed"`
+	IsBlocked  bool `json:"is_blocked"`
+	Counters   Counters
 }
 
 type Counters struct {

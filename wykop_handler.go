@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"github.com/parnurzeal/gorequest"
 	"net/url"
 	"strconv"
@@ -35,6 +36,36 @@ func (wh *WykopHandler) LoginToWypok() {
 	if wypokError != nil {
 		panic(wypokError.ErrorObject.Message)
 	}
+}
+
+func (wh *WykopHandler) GetMainPageLinks(page int) (mainPageLinks []Link, wypokError *WykopError) {
+	urlAddress := getMainPageUrl() + "/appkey/" + wh.appKey
+
+	if wh.authResponse.Userkey != "" {
+		urlAddress = urlAddress + "/userkey/" + wh.authResponse.Userkey
+	}
+
+	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
+
+	mainPageLinks = []Link{}
+	wypokError = wh.getObjectFromJson(responseBody, &mainPageLinks)
+
+	return
+}
+
+func (wh *WykopHandler) GetUpcomingLinks(page int) (mainPageLinks []Link, wypokError *WykopError) {
+	urlAddress := getUpcomingPageUrl() + "/appkey/" + wh.appKey
+
+	if wh.authResponse.Userkey != "" {
+		urlAddress = urlAddress + "/userkey/" + wh.authResponse.Userkey
+	}
+
+	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
+
+	mainPageLinks = []Link{}
+	wypokError = wh.getObjectFromJson(responseBody, &mainPageLinks)
+
+	return
 }
 
 func (wh *WykopHandler) UpvoteEntry(entry Entry) (voteResponse VoteResponse, wypokError *WykopError) {
@@ -182,12 +213,13 @@ func (wh *WykopHandler) GetProfile(username string) (profile Profile, wypokError
 }
 
 func (wh *WykopHandler) getObjectFromJson(bodyReader string, target interface{}) *WykopError {
-	parsinError := json.NewDecoder(strings.NewReader(bodyReader)).Decode(target)
-	if parsinError != nil {
+	parsingError := json.NewDecoder(strings.NewReader(bodyReader)).Decode(target)
+	if parsingError != nil {
+		fmt.Println(parsingError.Error())
 		var err *WykopError = &WykopError{}
-		parsinError = json.NewDecoder(strings.NewReader(bodyReader)).Decode(err)
-		if parsinError != nil {
-			panic(parsinError.Error())
+		parsingError = json.NewDecoder(strings.NewReader(bodyReader)).Decode(err)
+		if parsingError != nil {
+			panic(parsingError.Error())
 		}
 		return err
 	}

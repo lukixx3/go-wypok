@@ -12,7 +12,17 @@ const (
 	ENTRY_VOTE       = "https://a.wykop.pl/entries/vote/"
 	COMMENT_DELETE   = "https://a.wykop.pl/entries/deleteComment/"
 	ENTRIES_OF_A_tAG = "https://a.wykop.pl/tag/entries/"
+	MAIN_PAGE        = "https://a.wykop.pl/links/promoted/"
+	UPCOMING_PAGE    = "https://a.wykop.pl/links/upcoming/"
 )
+
+func getMainPageUrl() string {
+	return MAIN_PAGE
+}
+
+func getUpcomingPageUrl() string {
+	return UPCOMING_PAGE
+}
 
 func getLoginUrl(appkey string) string {
 	return LOGIN_URL + "/appkey/" + appkey

@@ -67,6 +67,35 @@ type Link struct {
 	UserFavorite    bool              `json:"user_favorite,omitempty"`
 }
 
+type LinkComment struct {
+	ID              int    `json:"id"`
+	Date            string `json:"date"`
+	Author          string `json:"author"`
+	AuthorGroup     int    `json:"author_group"`
+	AuthorAvatar    string `json:"author_avatar"`
+	AuthorAvatarBig string `json:"author_avatar_big"`
+	AuthorAvatarMed string `json:"author_avatar_med"`
+	AuthorAvatarLo  string `json:"author_avatar_lo"`
+	AuthorSex       string `json:"author_sex"`
+	VoteCount       int    `json:"vote_count"`
+	VoteCountPlus   int    `json:"vote_count_plus"`
+	VoteCountMinus  int    `json:"vote_count_minus"`
+	Body            string `json:"body"`
+	Source          string `json:"source"`
+	ParentID        int    `json:"parent_id"`
+	Status          string `json:"status"`
+	CanVote         bool   `json:"can_vote"`
+	UserVote        bool   `json:"user_vote"`
+	Blocked         bool   `json:"blocked"`
+	Deleted         bool   `json:"deleted"`
+	Embed           Embed  `json:"embed"`
+	Type            string `json:"type"`
+	App             string `json:"app"`
+	UserFavorite    bool   `json:"user_favorite"`
+	ViolationURL    string `json:"violation_url"`
+	Link            Link
+}
+
 type WykopShitUserVote string
 
 // when user is NOT logged in, user_vote field will not be provided
@@ -123,28 +152,28 @@ type Entry struct {
 }
 
 type EntryComment struct {
-	Id              int
-	Author          string
+	ID              int           `json:"id"`
+	Author          string        `json:"author"`
 	AuthorAvatar    string        `json:"author_avatar"`
-	AuthorAvatarBig string        `json:"author_big"`
-	AuthorAvatarMed string        `json:"author_med"`
-	AuthorAvatarLo  string        `json:"author_lo"`
+	AuthorAvatarBig string        `json:"author_avatar_big"`
+	AuthorAvatarMed string        `json:"author_avatar_med"`
+	AuthorAvatarLo  string        `json:"author_avatar_lo"`
 	AuthorGroup     int           `json:"author_group"`
 	AuthorSex       string        `json:"author_sex"`
 	Date            WypokShitDate `json:"date"`
-	Body            string
-	Source          string
-	EntryId         int `json:"entry_id"`
-	Blocked         bool
-	Deleted         bool
-	VoteCount       int `json:"vote_count"`
-	UserVote        int `json:"user_vote"`
+	Body            string        `json:"body"`
+	Source          string        `json:"source"`
+	EntryID         int           `json:"entry_id"`
+	Blocked         bool          `json:"blocked"`
+	Deleted         bool          `json:"deleted"`
+	VoteCount       int           `json:"vote_count"`
+	UserVote        int           `json:"user_vote"`
 	Voters          []Voter
-	Embed           Embed
+	Embed           Embed  `json:"embed"`
+	Type            string `json:"type"`
+	App             string `json:"app"`
+	ViolationURL    string `json:"violation_url"`
 	Entry           Entry
-	Type            string
-	App             string
-	ViolationUrl    string `json:"violation_url"`
 }
 
 type WypokShitDate struct {
@@ -218,10 +247,12 @@ type AuthenticationResponse struct {
 }
 
 type EntryResponse struct {
+	// for some stupid reason wypok returns string here, convert it manually to int
 	Id string `json:"id"`
 }
 
 type CommentResponse struct {
+	// and here, it should be int
 	Id string `json:"id"`
 }
 

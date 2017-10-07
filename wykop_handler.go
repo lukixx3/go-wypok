@@ -177,6 +177,24 @@ func (wh *WykopHandler) PostEntry(content string) (entryResponse EntryResponse, 
 	return
 }
 
+func (wh *WykopHandler) PostEntryWithEmbeddedContent(content *string, embeddedUrl *string) (entryResponse EntryResponse, wykopError *WykopError) {
+	body := url.Values{}
+	body.Set("body", *content)
+	body.Set("embed", *embeddedUrl)
+
+	urlAddress := getAddEntryUrl() + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
+
+	_, responseBody, _ := gorequest.New().Post(urlAddress).
+									Set(contentType, mediaTypeFormType).
+									Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body")+","+body.Get("embed"))).
+									Send(body).
+									End()
+
+	wykopError = wh.getObjectFromJson(responseBody, &entryResponse)
+
+	return
+}
+
 func (wh *WykopHandler) GetProfile(username string) (profile Profile, wypokError *WykopError) {
 	urlAddress := getProfileUrl(username) + appKeyPathElement + wh.appKey
 

@@ -4,6 +4,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
+	"strconv"
 )
 
 var wh WykopHandler
@@ -130,6 +131,28 @@ func TestGettingProfileLinksComments(t *testing.T) {
 	for _, comment := range profileComments {
 		assert.NotEqual(t, "", comment.Body, "Expected body of a comment to be populated")
 	}
+}
+
+func TestWykopHandler_PostEntryWithEmbeddedContent(t *testing.T) {
+	teardownTestCase := setupTestCase(t)
+	defer teardownTestCase(t)
+	wh.LoginToWypok()
+
+	content := "Test"
+	embed := "http://www.unixstickers.com/image/data/stickers/golang/golang.sh.png"
+
+	response, wykopError := wh.PostEntryWithEmbeddedContent(&content, &embed)
+	assert.Nil(t, wykopError)
+	assert.NotNil(t, response)
+	assert.NotNil(t, response.Id)
+
+	entryId, _ := strconv.Atoi(response.Id)
+	deleteResponse, deleteResponseError := wh.DeleteEntry(entryId)
+	assert.Nil(t, deleteResponseError, "Expected no error deleting entry")
+	assert.NotNil(t, deleteResponse)
+
+	deletedEntryId, _ := strconv.Atoi(deleteResponse.Id)
+	assert.Equal(t, entryId, deletedEntryId)
 }
 
 //func TestUploadingEntryWithImage(t *testing.T) {

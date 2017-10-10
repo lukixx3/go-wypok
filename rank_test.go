@@ -13,6 +13,12 @@ func TestWykopHandlerGetRank(t *testing.T) {
 
 	assert.Nil(t, wypokError)
 	assert.True(t, len(profiles) > 0)
+	for k, profile := range profiles {
+		if k == len(profiles)-1 {
+			continue
+		}
+		assert.True(t, profile.Rank <= profiles[k+1].Rank)
+	}
 }
 
 func TestWykopHandlerGetRankWithSortingType(t *testing.T) {
@@ -23,4 +29,11 @@ func TestWykopHandlerGetRankWithSortingType(t *testing.T) {
 
 	assert.Nil(t, wypokError)
 	assert.True(t, len(profiles) > 0)
+
+	for k, profile := range profiles {
+		if k == len(profiles)-1 {
+			continue
+		}
+		assert.True(t, profile.Comments >= profiles[k+1].Comments)
+	}
 }

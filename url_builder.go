@@ -14,10 +14,12 @@ const (
 	ENTRY_VOTE           = "https://a.wykop.pl/entries/vote/"
 	ENTRY_COMMENT_DELETE = "https://a.wykop.pl/entries/deleteComment/"
 
-	ENTRIES_FROM_TAG = "https://a.wykop.pl/tag/entries/"
+	RANK_INDEX = "https://a.wykop.pl/rank/index/appkey/%s"
 
 	MAIN_PAGE     = "https://a.wykop.pl/links/promoted/"
 	UPCOMING_PAGE = "https://a.wykop.pl/links/upcoming/"
+
+	ENTRIES_FROM_TAG = "https://a.wykop.pl/tag/entries/"
 )
 
 func getMainPageUrl() string {

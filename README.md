@@ -99,7 +99,7 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [ ] Unvote
  - [ ] Favorite
 13. Rank
- - [ ] Index
+ - [x] Index
 14. Observatory
  - [ ] Votes
  - [ ] Comments

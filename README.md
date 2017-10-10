@@ -121,7 +121,7 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [ ] Unobserve
  - [ ] Block
  - [ ] Unblock
-18. PM
+18. PM // In progress
  - [ ] ConversationsList
  - [ ] Conversation
  - [ ] SendMessage

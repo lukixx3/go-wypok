@@ -22,14 +22,6 @@ const (
 	ENTRIES_FROM_TAG = "https://a.wykop.pl/tag/entries/"
 )
 
-func getMainPageUrl() string {
-	return MAIN_PAGE
-}
-
-func getUpcomingPageUrl() string {
-	return UPCOMING_PAGE
-}
-
 func getLoginUrl(appkey string) string {
 	return LOGIN_URL + "/appkey/" + appkey
 }

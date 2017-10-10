@@ -36,37 +36,6 @@ type Profile struct {
 	IsObserved      bool   `json:"is_observed"`
 }
 
-type Link struct {
-	Id              int
-	Title           string
-	Description     string
-	Tags            string
-	Url             string
-	SourceUrl       string        `json:"source_url"`
-	VoteCount       int           `json:"vote_count"`
-	CommentCount    int           `json:"comment_count"`
-	ReportCount     int           `json:"report_count"`
-	Date            WypokShitDate `json:"date"`
-	Author          string
-	AuthorAvatar    string `json:"avatar_avatar"`
-	AuthorAvatarMed string `json:"avatar_med"`
-	AuthorAvatarLo  string `json:"avatar_lo"`
-	AuthorGroup     int    `json:"author_group"`
-	AuthorSex       string `json:"author_sex"`
-	Preview         string
-	UserLists       []int `json:"user_lists"`
-	Plus18          bool  `json:"plus_18"`
-	Status          string
-	CanVote         bool `json:"can_vote"`
-	IsHot           bool `json:"is_hot"`
-	HasOwnContent   bool `json:"has_own_content"`
-	Category        string
-	CategoryName    string            `json:"category_name,omitempty"`
-	UserVote        WykopShitUserVote `json:"user_vote,omitempty"`
-	UserObserve     bool              `json:"user_observe,omitempty"`
-	UserFavorite    bool              `json:"user_favorite,omitempty"`
-}
-
 type LinkComment struct {
 	ID              int    `json:"id"`
 	Date            string `json:"date"`

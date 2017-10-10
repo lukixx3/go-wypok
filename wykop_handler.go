@@ -54,34 +54,6 @@ func (wh *WykopHandler) LoginToWypok() *WykopError {
 	return wh.getObjectFromJson(responseBody, &wh.authResponse)
 }
 
-func (wh *WykopHandler) GetMainPageLinks(page int) (mainPageLinks []Link, wypokError *WykopError) {
-	urlAddress := getMainPageUrl() + appKeyPathElement + wh.appKey
-
-	if wh.authResponse.Userkey != "" {
-		urlAddress = urlAddress + userKeyPathElement + wh.authResponse.Userkey
-	}
-
-	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
-
-	wypokError = wh.getObjectFromJson(responseBody, &mainPageLinks)
-
-	return
-}
-
-func (wh *WykopHandler) GetUpcomingLinks(page int) (mainPageLinks []Link, wypokError *WykopError) {
-	urlAddress := getUpcomingPageUrl() + appKeyPathElement + wh.appKey
-
-	if wh.authResponse.Userkey != "" {
-		urlAddress = urlAddress + userKeyPathElement + wh.authResponse.Userkey
-	}
-
-	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
-
-	wypokError = wh.getObjectFromJson(responseBody, &mainPageLinks)
-
-	return
-}
-
 func (wh *WykopHandler) UpvoteEntry(entry Entry) (voteResponse VoteResponse, wypokError *WykopError) {
 	urlAddress := getEntryVoteUrl("entry", strconv.Itoa(entry.Id), "") + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
 

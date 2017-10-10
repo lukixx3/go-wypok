@@ -112,7 +112,7 @@ func (wh *WykopHandler) GetProfileEntries(username string, page int) (entries []
 	return
 }
 
-func (wh *WykopHandler) getProfileComments(username string, page int) (entries []LinkComment, wypokError *WykopError) {
+func (wh *WykopHandler) GetProfileComments(username string, page int) (entries []LinkComment, wypokError *WykopError) {
 	urlAddress := getProfileCommentsUrl(username) + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey + "/page/" + strconv.Itoa(page)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
@@ -185,10 +185,10 @@ func (wh *WykopHandler) PostEntryWithEmbeddedContent(content *string, embeddedUr
 	urlAddress := getAddEntryUrl() + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body")+","+body.Get("embed"))).
-									Send(body).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body")+","+body.Get("embed"))).
+		Send(body).
+		End()
 
 	wykopError = wh.getObjectFromJson(responseBody, &entryResponse)
 

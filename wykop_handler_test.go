@@ -3,8 +3,8 @@ package go_wypok
 import (
 	"github.com/stretchr/testify/assert"
 	"os"
-	"testing"
 	"strconv"
+	"testing"
 )
 
 var wh WykopHandler
@@ -123,7 +123,7 @@ func TestGettingProfileLinksComments(t *testing.T) {
 	defer teardownTestCase(t)
 	wh.LoginToWypok()
 
-	profileComments, wypokError := wh.getProfileComments("m__b", 1)
+	profileComments, wypokError := wh.GetProfileComments("m__b", 1)
 	assert.Nil(t, wypokError)
 	assert.NotNil(t, profileComments)
 	assert.True(t, len(profileComments) > 0, "Looks like user m__b doesnt have any comments on links")

@@ -12,9 +12,12 @@ const (
 	ENTRY_ADD            = "https://a.wykop.pl/entries/add/"
 	ENTRY_EDIT           = "https://a.wykop.pl/entries/edit/"
 	ENTRY_DELETE         = "https://a.wykop.pl/entries/delete/"
-	ENTRY_VOTE           = "https://a.wykop.pl/entries/vote/"
 	ENTRY_ADD_COMMENT    = "https://a.wykop.pl/entries/addComment/"
+	ENTRY_COMMENT_EDIT   = "https://a.wykop.pl/entries/editComment/"
 	ENTRY_COMMENT_DELETE = "https://a.wykop.pl/entries/deleteComment/"
+	ENTRY_VOTE           = "https://a.wykop.pl/entries/vote/"
+	ENTRY_UNVOTE         = "https://a.wykop.pl/entries/unvote/"
+	ENTRY_FAVORITE       = "https://a.wykop.pl/entries/favorite/"
 
 	RANK_INDEX = "https://a.wykop.pl/rank/index/appkey/%s/order/%s"
 

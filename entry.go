@@ -3,6 +3,7 @@ package go_wypok
 import (
 	"github.com/parnurzeal/gorequest"
 	"net/url"
+	"io/ioutil"
 )
 
 type Entry struct {
@@ -31,7 +32,7 @@ type Entry struct {
 	UserVote          int `json:"user_vote"`
 	Voters            []Voter
 	UserFavorite      bool   `json:"user_favorite"`
-	TypeE             string `json:"type"`
+	EntryType         string `json:"type"`
 	Embed             Embed
 	Deleted           bool
 	ViolationUrl      string `json:"violation_url"`
@@ -65,6 +66,24 @@ type EntryComment struct {
 	Entry           Entry
 }
 
+
+type UpvoteType int
+
+const (
+	entry = 1 + iota
+	comment
+)
+
+var upvoteTypes = [...]string{
+	"entry",
+	"comment",
+}
+
+// return sorting type string based on int value of const
+func (m UpvoteType) String() string {
+	return upvoteTypes[m-1]
+}
+
 func (wh *WykopHandler) GetEntry(id string) (entry Entry, wypokError *WykopError) {
 	responseBody := wh.sendPostRequestForBody(getEntryUrl(id) + appKeyPathElement + wh.appKey)
 
@@ -84,7 +103,42 @@ func (wh *WykopHandler) PostEntry(content string) (entryResponse EntryResponse, 
 		Send(body).
 		End()
 
-	entryResponse = EntryResponse{}
+	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
+
+	return
+}
+
+func (wh *WykopHandler) PostEntryWithEmbeddedContent(content string, embeddedUrl string) (entryResponse EntryResponse, wykopError *WykopError) {
+	body := url.Values{}
+	body.Set("body", content)
+	body.Set("embed", embeddedUrl)
+
+	urlAddress := getAddEntryUrl() + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
+
+	_, responseBody, _ := gorequest.New().Post(urlAddress).
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body")+","+body.Get("embed"))).
+		Send(body).
+		End()
+
+	wykopError = wh.getObjectFromJson(responseBody, &entryResponse)
+
+	return
+}
+
+func (wh *WykopHandler) PostEntryWithImage(content string, absolutePath string) (entryResponse EntryResponse, wypokError *WykopError) {
+	body := url.Values{}
+	body.Set("body", content)
+
+	urlAddress := getAddEntryUrl() + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
+
+	reqBody := gorequest.New().Post(urlAddress).
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body")))
+	b, _ := ioutil.ReadFile(absolutePath)
+
+	_, responseBody, _ := reqBody.Send(body).SendFile(b, "", "file").End()
+
 	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
 
 	return
@@ -102,7 +156,6 @@ func (wh *WykopHandler) EditEntry(entryId string, content string) (entryResponse
 		Send(body).
 		End()
 
-	entryResponse = EntryResponse{}
 	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
 
 	return
@@ -110,6 +163,22 @@ func (wh *WykopHandler) EditEntry(entryId string, content string) (entryResponse
 
 func (wh *WykopHandler) AddEntryComment(entryId string, comment string) (commentResponse CommentResponse, wypokError *WykopError) {
 	urlAddress := getEntryAddCommentUrl(entryId) + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
+
+	body := url.Values{}
+	body.Set("body", comment)
+	_, responseBody, _ := gorequest.New().Post(urlAddress).
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body"))).
+		Send(body).
+		End()
+
+	wypokError = wh.getObjectFromJson(responseBody, &commentResponse)
+
+	return
+}
+
+func (wh *WykopHandler) EditEntryComment(entryId string, commentId string, comment string) (commentResponse CommentResponse, wypokError *WykopError) {
+	urlAddress := getEditEntryCommentUrl(entryId, commentId) + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
 
 	body := url.Values{}
 	body.Set("body", comment)
@@ -144,6 +213,36 @@ func (wh *WykopHandler) DeleteEntry(id string) (entryResponse EntryResponse, wyp
 	return
 }
 
+func (wh *WykopHandler) UpvoteEntry(entryId string) (voteResponse VoteResponse, wypokError *WykopError) {
+	urlAddress := getEntryVoteUrl(entry, entryId, "") + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
+
+	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
+
+	wypokError = wh.getObjectFromJson(responseBody, &voteResponse)
+
+	return
+}
+
+func (wh *WykopHandler) UnvoteEntry(entryId string) (voteResponse VoteResponse, wypokError *WykopError) {
+	urlAddress := getEntryUnvoteUrl(entry, entryId, "") + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
+
+	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
+
+	wypokError = wh.getObjectFromJson(responseBody, &voteResponse)
+
+	return
+}
+
+func (wh *WykopHandler) FavoriteEntry(entryId string) (favoriteResponse FavoriteResponse, wypokError *WykopError) {
+	urlAddress := getEntryFavoriteUrl(entryId) + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
+
+	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
+
+	wypokError = wh.getObjectFromJson(responseBody, &favoriteResponse)
+
+	return
+}
+
 func getEntryUrl(entry string) string {
 	return ENTRY_INDEX + entry
 }
@@ -164,10 +263,23 @@ func getEntryAddCommentUrl(entryId string) string {
 	return ENTRY_ADD_COMMENT + entryId
 }
 
+func getEditEntryCommentUrl(entryId string, commentId string) string {
+	return ENTRY_COMMENT_EDIT + entryId + "/" + commentId
+}
+
 func getDeleteCommentUrl(entryId string, commentId string) string {
 	return ENTRY_COMMENT_DELETE + entryId + "/" + commentId
 }
 
-func getEntryVoteUrl(objectType string, entryId string, commentId string) string {
-	return ENTRY_VOTE + objectType + "/" + entryId + "/" + commentId
+func getEntryVoteUrl(voteType UpvoteType, entryId string, commentId string) string {
+	return ENTRY_VOTE + voteType.String() + "/" + entryId + "/" + commentId
 }
+
+func getEntryUnvoteUrl(voteType UpvoteType, entryId string, commentId string) string {
+	return ENTRY_UNVOTE + voteType.String() + "/" + entryId + "/" + commentId
+}
+
+func getEntryFavoriteUrl(entryId string) string {
+	return ENTRY_FAVORITE + entryId
+}
+

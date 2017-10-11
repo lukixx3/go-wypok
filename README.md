@@ -93,11 +93,11 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [x] Edit (EditEntry)
  - [x] Delete (DeleteEntry)
  - [x] AddComment (AddEntryComment)
- - [ ] EditComment
+ - [x] EditComment (EditEntryComment)
  - [x] DeleteComment (DeleteEntryComment)
  - [x] Vote (UpvoteEntry)
- - [ ] Unvote
- - [ ] Favorite
+ - [x] Unvote (UnvoteEntry)
+ - [x] Favorite (FavoriteEntry)
 13. Rank
  - [x] Index
 14. Observatory

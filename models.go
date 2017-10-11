@@ -148,6 +148,10 @@ type VoteResponse struct {
 	//Voters string
 }
 
+type FavoriteResponse struct {
+	UserFavorite bool `json:"user_favorite"`
+}
+
 type AuthenticationResponse struct {
 	Login        string
 	Email        string
@@ -156,7 +160,7 @@ type AuthenticationResponse struct {
 }
 
 type EntryResponse struct {
-	// for some stupid reason wypok returns string here, convert it manually to int
+	// for some stupid reason wypok returns string here
 	Id string `json:"id"`
 }
 

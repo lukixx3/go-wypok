@@ -12,6 +12,7 @@ const (
 	ENTRY_ADD            = "https://a.wykop.pl/entries/add"
 	ENTRY_DELETE         = "https://a.wykop.pl/entries/delete/"
 	ENTRY_VOTE           = "https://a.wykop.pl/entries/vote/"
+	ENTRY_ADD_COMMENT    = "https://a.wykop.pl/entries/vote/addComment/"
 	ENTRY_COMMENT_DELETE = "https://a.wykop.pl/entries/deleteComment/"
 
 	RANK_INDEX = "https://a.wykop.pl/rank/index/appkey/%s/order/%s"
@@ -40,26 +41,6 @@ func getProfileCommentsUrl(username string) string {
 
 func getProfileEntriesCommentsUrl(username string) string {
 	return PROFILE_ENTRY_COMMENTS + username
-}
-
-func getEntryUrl(entry string) string {
-	return ENTRY_INDEX + entry
-}
-
-func getDeleteEntryUrl(entry string) string {
-	return ENTRY_DELETE + entry
-}
-
-func getDeleteCommentUrl(entryId string, commentId string) string {
-	return ENTRY_COMMENT_DELETE + entryId + "/" + commentId
-}
-
-func getAddEntryUrl() string {
-	return ENTRY_ADD
-}
-
-func getEntryVoteUrl(objectType string, entryId string, commentId string) string {
-	return ENTRY_VOTE + objectType + "/" + entryId + "/" + commentId
 }
 
 func getTagEntries(tag string) string {

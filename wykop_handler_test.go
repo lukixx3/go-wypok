@@ -76,13 +76,12 @@ func TestWykopHandler_PostEntryWithEmbeddedContent(t *testing.T) {
 	assert.NotNil(t, response)
 	assert.NotNil(t, response.Id)
 
-	entryId, _ := strconv.Atoi(response.Id)
-	deleteResponse, deleteResponseError := wh.DeleteEntry(entryId)
+	deleteResponse, deleteResponseError := wh.DeleteEntry(response.Id)
 	assert.Nil(t, deleteResponseError, "Expected no error deleting entry")
 	assert.NotNil(t, deleteResponse)
 
 	deletedEntryId, _ := strconv.Atoi(deleteResponse.Id)
-	assert.Equal(t, entryId, deletedEntryId)
+	assert.Equal(t, response.Id, deletedEntryId)
 }
 
 //func TestUploadingEntryWithImage(t *testing.T) {

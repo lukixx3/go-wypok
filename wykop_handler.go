@@ -104,51 +104,6 @@ func (wh *WykopHandler) GetProfileEntriesComments(username string, page int) (en
 	return
 }
 
-func (wh *WykopHandler) DeleteEntryComment(entryId int, commentId int) (commentResponse CommentResponse, wypokError *WykopError) {
-	urlAddress := getDeleteCommentUrl(strconv.Itoa(entryId), strconv.Itoa(commentId)) + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
-
-	responseBody := wh.sendPostRequestForBody(urlAddress)
-
-	wypokError = wh.getObjectFromJson(responseBody, &commentResponse)
-
-	return
-}
-
-func (wh *WykopHandler) DeleteEntry(id int) (entryResponse EntryResponse, wypokError *WykopError) {
-	urlAddress := getDeleteEntryUrl(strconv.Itoa(id)) + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
-
-	responseBody := wh.sendPostRequestForBody(urlAddress)
-
-	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
-
-	return
-}
-
-func (wh *WykopHandler) GetEntry(id int) (entry Entry, wypokError *WykopError) {
-	responseBody := wh.sendPostRequestForBody(getEntryUrl(strconv.Itoa(id)) + appKeyPathElement + wh.appKey)
-
-	wypokError = wh.getObjectFromJson(responseBody, &entry)
-	return
-}
-
-func (wh *WykopHandler) PostEntry(content string) (entryResponse EntryResponse, wypokError *WykopError) {
-	body := url.Values{}
-	body.Set("body", content)
-
-	urlAddress := getAddEntryUrl() + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
-
-	_, responseBody, _ := gorequest.New().Post(urlAddress).
-		Set(contentType, mediaTypeFormType).
-		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body"))).
-		Send(body).
-		End()
-
-	entryResponse = EntryResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
-
-	return
-}
-
 func (wh *WykopHandler) PostEntryWithEmbeddedContent(content *string, embeddedUrl *string) (entryResponse EntryResponse, wykopError *WykopError) {
 	body := url.Values{}
 	body.Set("body", *content)

@@ -89,10 +89,10 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [ ] MarkAsReadNotification
 12. Entries
  - [x] Index (GetEntry)
- - [x] Add PostEntry
- - [x] Edit
+ - [x] Add (PostEntry)
+ - [x] Edit (EditEntry)
  - [x] Delete (DeleteEntry)
- - [x] AddComment
+ - [x] AddComment (AddEntryComment)
  - [ ] EditComment
  - [x] DeleteComment (DeleteEntryComment)
  - [x] Vote (UpvoteEntry)

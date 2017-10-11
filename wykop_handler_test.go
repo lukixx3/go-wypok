@@ -3,7 +3,6 @@ package go_wypok
 import (
 	"github.com/stretchr/testify/assert"
 	"os"
-	"strconv"
 	"testing"
 )
 
@@ -80,8 +79,7 @@ func TestWykopHandler_PostEntryWithEmbeddedContent(t *testing.T) {
 	assert.Nil(t, deleteResponseError, "Expected no error deleting entry")
 	assert.NotNil(t, deleteResponse)
 
-	deletedEntryId, _ := strconv.Atoi(deleteResponse.Id)
-	assert.Equal(t, response.Id, deletedEntryId)
+	assert.Equal(t, response.Id, deleteResponse.Id)
 }
 
 //func TestUploadingEntryWithImage(t *testing.T) {

@@ -90,9 +90,9 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
 12. Entries
  - [x] Index (GetEntry)
  - [x] Add PostEntry
- - [ ] Edit
+ - [x] Edit
  - [x] Delete (DeleteEntry)
- - [ ] AddComment
+ - [x] AddComment
  - [ ] EditComment
  - [x] DeleteComment (DeleteEntryComment)
  - [x] Vote (UpvoteEntry)

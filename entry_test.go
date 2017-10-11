@@ -17,7 +17,7 @@ func TestWykopHandlerGetEntry(t *testing.T) {
 	assert.Equal(t, "Niepoprawne parametry", wypokError.ErrorObject.Message)
 
 	assert.Equal(t, 0, entry.Id)
-	assert.NotEmpty(t, entry.Author)
+	assert.Empty(t, entry.Author)
 }
 
 func TestWykopHandlerPostEntry(t *testing.T) {
@@ -55,3 +55,51 @@ func TestWykopHandlerDeleteEntry(t *testing.T) {
 	assert.Nil(t, deleteEntryError)
 	assert.Equal(t, deleteEntryResponse.Id, newEntry.Id)
 }
+
+func TestWykopHandlerAddEntryComment(t *testing.T) {
+	teardownTestCase := setupTestCase(t)
+	defer teardownTestCase(t)
+	wh.LoginToWypok()
+
+	newEntry, wypokError := wh.PostEntry("testfsada sdas d")
+	assert.Nil(t, wypokError)
+	assert.NotEmpty(t, newEntry.Id)
+
+	addCommentResponse, addCommentError := wh.AddEntryComment(newEntry.Id, "Michau bialek ssie rogalek, a ten wpis zaraz zniknie ( ͡° ͜ʖ ͡°)")
+	assert.Nil(t, addCommentError)
+	assert.NotEmpty(t, addCommentResponse.Id)
+
+	delEntryResponse, delEntryError := wh.DeleteEntryComment(newEntry.Id, addCommentResponse.Id)
+	assert.Nil(t, delEntryError)
+	assert.Equal(t, addCommentResponse.Id, delEntryResponse.Id)
+
+	deleteEntryResponse, deleteEntryError := wh.DeleteEntry(newEntry.Id)
+	assert.Nil(t, deleteEntryError)
+	assert.Equal(t, deleteEntryResponse.Id, newEntry.Id)
+}
+
+func TestWykopHandlerEditEntry(t *testing.T) {
+	teardownTestCase := setupTestCase(t)
+	defer teardownTestCase(t)
+	wh.LoginToWypok()
+
+	newEntry, wypokError := wh.PostEntry("test editing entry")
+	assert.Nil(t, wypokError)
+	assert.NotEmpty(t, newEntry.Id)
+
+	newEntryContent := "new entry content"
+
+	editEntryResponse, editEntryError := wh.EditEntry(newEntry.Id, newEntryContent)
+	assert.Nil(t, editEntryError)
+	assert.NotEmpty(t, editEntryResponse.Id)
+
+	editedEntry, editedEntryError := wh.GetEntry(newEntry.Id)
+	assert.Nil(t, editedEntryError)
+	assert.NotEmpty(t, editEntryResponse.Id)
+	assert.Equal(t, newEntryContent, editedEntry.Body)
+
+	deleteEntryResponse, deleteEntryError := wh.DeleteEntry(newEntry.Id)
+	assert.Nil(t, deleteEntryError)
+	assert.Equal(t, deleteEntryResponse.Id, newEntry.Id)
+}
+

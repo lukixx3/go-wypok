@@ -92,6 +92,10 @@ func TestWykopHandlerPostEntryWithEmbeddedContent(t *testing.T) {
 	assert.NotNil(t, response)
 	assert.NotNil(t, response.Id)
 
+	newEntry, newEntryError := wh.GetEntry(response.Id)
+	assert.Nil(t, newEntryError)
+	assert.NotEmpty(t, newEntry.Embed.Url)
+
 	deleteResponse, deleteResponseError := wh.DeleteEntry(response.Id)
 	assert.Nil(t, deleteResponseError, "Expected no error deleting entry")
 	assert.NotNil(t, deleteResponse)
@@ -141,21 +145,33 @@ func TestWykopHandlerAddEntryComment(t *testing.T) {
 	defer teardownTestCase(t)
 	wh.LoginToWypok()
 
-	newEntry, wypokError := wh.PostEntry("testfsada sdas d")
+	newEntryResponse, wypokError := wh.PostEntry("testfsada sdas d")
 	assert.Nil(t, wypokError)
-	assert.NotEmpty(t, newEntry.Id)
+	assert.NotEmpty(t, newEntryResponse.Id)
 
-	addCommentResponse, addCommentError := wh.AddEntryComment(newEntry.Id, "Michau bialek ssie rogalek, a ten wpis zaraz zniknie ( ͡° ͜ʖ ͡°)")
-	assert.Nil(t, addCommentError)
-	assert.NotEmpty(t, addCommentResponse.Id)
+	comment := "Michau bialek ssie rogalek, a ten wpis zaraz zniknie ( ͡° ͜ʖ ͡°)"
+	embed := "http://www.unixstickers.com/image/data/stickers/golang/golang.sh.png"
 
-	delEntryResponse, delEntryError := wh.DeleteEntryComment(newEntry.Id, addCommentResponse.Id)
+	firstCommentResponse, firstCommentError := wh.AddEntryComment(newEntryResponse.Id, comment)
+	assert.Nil(t, firstCommentError)
+	assert.NotEmpty(t, firstCommentResponse.Id)
+
+	commentWithEmbedResp, commentWithEmbeddError := wh.AddEntryCommentWithEmbeddedContent(newEntryResponse.Id, comment, embed)
+	assert.Nil(t, commentWithEmbeddError)
+	assert.NotEmpty(t, commentWithEmbedResp.Id)
+
+	newEntry, newEntryError := wh.GetEntry(newEntryResponse.Id)
+	assert.Nil(t, newEntryError)
+	assert.Len(t, newEntry.Comments, 2)
+	assert.NotEmpty(t, newEntry.Comments[1].Embed.Url)
+
+	delEntryResponse, delEntryError := wh.DeleteEntryComment(newEntryResponse.Id, firstCommentResponse.Id)
 	assert.Nil(t, delEntryError)
-	assert.Equal(t, addCommentResponse.Id, delEntryResponse.Id)
+	assert.Equal(t, firstCommentResponse.Id, delEntryResponse.Id)
 
-	deleteEntryResponse, deleteEntryError := wh.DeleteEntry(newEntry.Id)
+	deleteEntryResponse, deleteEntryError := wh.DeleteEntry(newEntryResponse.Id)
 	assert.Nil(t, deleteEntryError)
-	assert.Equal(t, deleteEntryResponse.Id, newEntry.Id)
+	assert.Equal(t, deleteEntryResponse.Id, newEntryResponse.Id)
 }
 
 func TestWykopHandlerEditEntry(t *testing.T) {

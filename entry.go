@@ -98,7 +98,6 @@ func (wh *WykopHandler) PostEntry(content string) (entryResponse EntryResponse, 
 
 	body := url.Values{}
 	body.Set("body", content)
-
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
 		Set(contentType, mediaTypeFormType).
 		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body"))).
@@ -149,7 +148,6 @@ func (wh *WykopHandler) EditEntry(entryId string, content string) (entryResponse
 
 	body := url.Values{}
 	body.Set("body", content)
-	fmt.Println(urlAddress)
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
 		Set(contentType, mediaTypeFormType).
 		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body"))).
@@ -169,6 +167,23 @@ func (wh *WykopHandler) AddEntryComment(entryId string, comment string) (comment
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
 		Set(contentType, mediaTypeFormType).
 		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body"))).
+		Send(body).
+		End()
+
+	wypokError = wh.getObjectFromJson(responseBody, &commentResponse)
+
+	return
+}
+
+func (wh *WykopHandler) AddEntryCommentWithEmbeddedContent(entryId string, comment string, embeddedUrl string) (commentResponse CommentResponse, wypokError *WykopError) {
+	urlAddress := getEntryAddCommentUrl(entryId, wh.appKey, wh.authResponse.Userkey)
+
+	body := url.Values{}
+	body.Set("body", comment)
+	body.Set("embed", embeddedUrl)
+	_, responseBody, _ := gorequest.New().Post(urlAddress).
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body")+","+body.Get("embed"))).
 		Send(body).
 		End()
 

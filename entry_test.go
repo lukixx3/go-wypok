@@ -6,6 +6,43 @@ import (
 	"testing"
 )
 
+func TestBuildingUrls(t *testing.T) {
+	expectedGetEntryUrl := "https://a.wykop.pl/entries/index/entry_id/appkey/APPKEY"
+	expectedAddEntryUrl := "https://a.wykop.pl/entries/add/appkey/APPKEY/userkey/USERKEY"
+	expectedEditEntryUrl := "https://a.wykop.pl/entries/edit/entry_id/appkey/APPKEY/userkey/USERKEY"
+	expectedDelEntryUrl := "https://a.wykop.pl/entries/delete/entry_id/appkey/APPKEY/userkey/USERKEY"
+
+	expectedAddEntryCommentUrl := "https://a.wykop.pl/entries/addComment/entry_id/appkey/APPKEY/userkey/USERKEY"
+	expectedEditEntryCommentUrl := "https://a.wykop.pl/entries/editComment/entry_id/comment_id/appkey/APPKEY/userkey/USERKEY"
+	expectedDelEntryCommentUrl := "https://a.wykop.pl/entries/deleteComment/entry_id/comment_id/appkey/APPKEY/userkey/USERKEY"
+
+	expectedEntryVoteUrl := "https://a.wykop.pl/entries/vote/entry/entry_id/appkey/APPKEY/userkey/USERKEY"
+	expectedEntryUnvoteUrl := "https://a.wykop.pl/entries/unvote/entry/entry_id/appkey/APPKEY/userkey/USERKEY"
+
+	expectedEntryCommentVoteUrl := "https://a.wykop.pl/entries/vote/comment/entry_id/comment_id/appkey/APPKEY/userkey/USERKEY"
+	expectedEntryCommentUnoteUrl := "https://a.wykop.pl/entries/unvote/comment/entry_id/comment_id/appkey/APPKEY/userkey/USERKEY"
+
+	expectedEntryFavoriteUrl := "https://a.wykop.pl/entries/favorite/entry_id/appkey/APPKEY/userkey/USERKEY"
+
+	appKey := "APPKEY"
+	entryId := "entry_id"
+	commentId := "comment_id"
+	userKey := "USERKEY"
+
+	assert.Equal(t, expectedGetEntryUrl, getEntryUrl(entryId, appKey))
+	assert.Equal(t, expectedAddEntryUrl, getAddEntryUrl(appKey, userKey))
+	assert.Equal(t, expectedEditEntryUrl, getEditEntryUrl(entryId, appKey, userKey))
+	assert.Equal(t, expectedDelEntryUrl, getDeleteEntryUrl(entryId, appKey, userKey))
+	assert.Equal(t, expectedAddEntryCommentUrl, getEntryAddCommentUrl(entryId, appKey, userKey))
+	assert.Equal(t, expectedEditEntryCommentUrl, getEditEntryCommentUrl(entryId, commentId, appKey, userKey))
+	assert.Equal(t, expectedDelEntryCommentUrl, getDeleteCommentUrl(entryId, commentId, appKey, userKey))
+	assert.Equal(t, expectedEntryVoteUrl, getEntryVoteUrl(entry, entryId, commentId, appKey, userKey))
+	assert.Equal(t, expectedEntryUnvoteUrl, getEntryUnvoteUrl(entry, entryId, commentId, appKey, userKey))
+	assert.Equal(t, expectedEntryCommentVoteUrl, getEntryVoteUrl(comment, entryId, commentId, appKey, userKey))
+	assert.Equal(t, expectedEntryCommentUnoteUrl, getEntryUnvoteUrl(comment, entryId, commentId, appKey, userKey))
+	assert.Equal(t, expectedEntryFavoriteUrl, getEntryFavoriteUrl(entryId, appKey, userKey))
+}
+
 func TestWykopHandlerGetEntry(t *testing.T) {
 	teardownTestCase := setupTestCase(t)
 	defer teardownTestCase(t)
@@ -210,4 +247,3 @@ func TestWykopHandlerFavoriteEntry(t *testing.T) {
 	assert.Nil(t, unfavResponseError)
 	assert.False(t, unfavResponse.UserFavorite)
 }
-

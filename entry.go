@@ -104,11 +104,7 @@ func (wh *WykopHandler) PostEntry(content string) (entryResponse EntryResponse, 
 		Send(body).
 		End()
 
-	fuckingResponse := fuckingStringEntryResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &fuckingResponse)
-	entryResponse = newEntryResponse(fuckingResponse)
-
-	return
+	return wh.getResponseBodyAsEntryResponse(responseBody)
 }
 
 func (wh *WykopHandler) PostEntryWithEmbeddedContent(content string, embeddedUrl string) (entryResponse EntryResponse, wypokError *WykopError) {
@@ -123,11 +119,7 @@ func (wh *WykopHandler) PostEntryWithEmbeddedContent(content string, embeddedUrl
 		Send(body).
 		End()
 
-	fuckingResponse := fuckingStringEntryResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &fuckingResponse)
-	entryResponse = newEntryResponse(fuckingResponse)
-
-	return
+	return wh.getResponseBodyAsEntryResponse(responseBody)
 }
 
 func (wh *WykopHandler) PostEntryWithImage(content string, absolutePath string) (entryResponse EntryResponse, wypokError *WykopError) {
@@ -142,11 +134,7 @@ func (wh *WykopHandler) PostEntryWithImage(content string, absolutePath string) 
 
 	_, responseBody, _ := reqBody.Send(body).SendFile(b, "", "file").End()
 
-	fuckingResponse := fuckingStringEntryResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &fuckingResponse)
-	entryResponse = newEntryResponse(fuckingResponse)
-
-	return
+	return wh.getResponseBodyAsEntryResponse(responseBody)
 }
 
 func (wh *WykopHandler) EditEntry(entryId int, content string) (entryResponse EntryResponse, wypokError *WykopError) {
@@ -160,11 +148,7 @@ func (wh *WykopHandler) EditEntry(entryId int, content string) (entryResponse En
 		Send(body).
 		End()
 
-	fuckingResponse := fuckingStringEntryResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &fuckingResponse)
-	entryResponse = newEntryResponse(fuckingResponse)
-
-	return
+	return wh.getResponseBodyAsEntryResponse(responseBody)
 }
 
 func (wh *WykopHandler) AddEntryComment(entryId int, comment string) (commentResponse CommentResponse, wypokError *WykopError) {
@@ -178,11 +162,7 @@ func (wh *WykopHandler) AddEntryComment(entryId int, comment string) (commentRes
 		Send(body).
 		End()
 
-	fuckingResponse := fuckingStringCommentResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &fuckingResponse)
-	commentResponse = newCommentResponse(fuckingResponse)
-
-	return
+	return wh.getResponseBodyAsCommentResponse(responseBody)
 }
 
 func (wh *WykopHandler) AddEntryCommentWithEmbeddedContent(entryId int, comment string, embeddedUrl string) (commentResponse CommentResponse, wypokError *WykopError) {
@@ -197,11 +177,7 @@ func (wh *WykopHandler) AddEntryCommentWithEmbeddedContent(entryId int, comment 
 		Send(body).
 		End()
 
-	fuckingResponse := fuckingStringCommentResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &fuckingResponse)
-	commentResponse = newCommentResponse(fuckingResponse)
-
-	return
+	return wh.getResponseBodyAsCommentResponse(responseBody)
 }
 
 func (wh *WykopHandler) EditEntryComment(entryId int, commentId int, comment string) (commentResponse CommentResponse, wypokError *WykopError) {
@@ -215,11 +191,7 @@ func (wh *WykopHandler) EditEntryComment(entryId int, commentId int, comment str
 		Send(body).
 		End()
 
-	fuckingResponse := fuckingStringCommentResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &fuckingResponse)
-	commentResponse = newCommentResponse(fuckingResponse)
-
-	return
+	return wh.getResponseBodyAsCommentResponse(responseBody)
 }
 
 func (wh *WykopHandler) DeleteEntryComment(entryId int, commentId int) (commentResponse CommentResponse, wypokError *WykopError) {
@@ -227,11 +199,7 @@ func (wh *WykopHandler) DeleteEntryComment(entryId int, commentId int) (commentR
 
 	responseBody := wh.sendPostRequestForBody(urlAddress)
 
-	fuckingResponse := fuckingStringCommentResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &fuckingResponse)
-	commentResponse = newCommentResponse(fuckingResponse)
-
-	return
+	return wh.getResponseBodyAsCommentResponse(responseBody)
 }
 
 func (wh *WykopHandler) DeleteEntry(id int) (entryResponse EntryResponse, wypokError *WykopError) {
@@ -239,11 +207,7 @@ func (wh *WykopHandler) DeleteEntry(id int) (entryResponse EntryResponse, wypokE
 
 	responseBody := wh.sendPostRequestForBody(urlAddress)
 
-	fuckingResponse := fuckingStringEntryResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &fuckingResponse)
-	entryResponse = newEntryResponse(fuckingResponse)
-
-	return
+	return wh.getResponseBodyAsEntryResponse(responseBody)
 }
 
 func (wh *WykopHandler) UpvoteEntry(entryId int) (voteResponse VoteResponse, wypokError *WykopError) {
@@ -342,4 +306,18 @@ func getEntryUnvoteUrl(voteType UpvoteType, entryId int, commentId int, appKey s
 
 func getEntryFavoriteUrl(entryId int, appKey string, userKey string) string {
 	return fmt.Sprintf(ENTRY_FAVORITE, entryId, appKey, userKey)
+}
+
+func (wh *WykopHandler) getResponseBodyAsEntryResponse(responseBody string) (commentResponse EntryResponse, wypokError *WykopError) {
+	fuckingResponse := fuckingStringEntryResponse{}
+	wypokError = wh.getObjectFromJson(responseBody, &fuckingResponse)
+	commentResponse = newEntryResponse(fuckingResponse)
+	return
+}
+
+func (wh *WykopHandler) getResponseBodyAsCommentResponse(responseBody string) (commentResponse CommentResponse, wypokError *WykopError) {
+	fuckingResponse := fuckingStringCommentResponse{}
+	wypokError = wh.getObjectFromJson(responseBody, &fuckingResponse)
+	commentResponse = newCommentResponse(fuckingResponse)
+	return
 }

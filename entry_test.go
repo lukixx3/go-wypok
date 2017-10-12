@@ -2,31 +2,30 @@ package go_wypok
 
 import (
 	"github.com/stretchr/testify/assert"
-	"strconv"
 	"testing"
 )
 
 func TestBuildingUrls(t *testing.T) {
-	expectedGetEntryUrl := "https://a.wykop.pl/entries/index/entry_id/appkey/APPKEY"
+	expectedGetEntryUrl := "https://a.wykop.pl/entries/index/999/appkey/APPKEY"
 	expectedAddEntryUrl := "https://a.wykop.pl/entries/add/appkey/APPKEY/userkey/USERKEY"
-	expectedEditEntryUrl := "https://a.wykop.pl/entries/edit/entry_id/appkey/APPKEY/userkey/USERKEY"
-	expectedDelEntryUrl := "https://a.wykop.pl/entries/delete/entry_id/appkey/APPKEY/userkey/USERKEY"
+	expectedEditEntryUrl := "https://a.wykop.pl/entries/edit/999/appkey/APPKEY/userkey/USERKEY"
+	expectedDelEntryUrl := "https://a.wykop.pl/entries/delete/999/appkey/APPKEY/userkey/USERKEY"
 
-	expectedAddEntryCommentUrl := "https://a.wykop.pl/entries/addComment/entry_id/appkey/APPKEY/userkey/USERKEY"
-	expectedEditEntryCommentUrl := "https://a.wykop.pl/entries/editComment/entry_id/comment_id/appkey/APPKEY/userkey/USERKEY"
-	expectedDelEntryCommentUrl := "https://a.wykop.pl/entries/deleteComment/entry_id/comment_id/appkey/APPKEY/userkey/USERKEY"
+	expectedAddEntryCommentUrl := "https://a.wykop.pl/entries/addComment/999/appkey/APPKEY/userkey/USERKEY"
+	expectedEditEntryCommentUrl := "https://a.wykop.pl/entries/editComment/999/666/appkey/APPKEY/userkey/USERKEY"
+	expectedDelEntryCommentUrl := "https://a.wykop.pl/entries/deleteComment/999/666/appkey/APPKEY/userkey/USERKEY"
 
-	expectedEntryVoteUrl := "https://a.wykop.pl/entries/vote/entry/entry_id/appkey/APPKEY/userkey/USERKEY"
-	expectedEntryUnvoteUrl := "https://a.wykop.pl/entries/unvote/entry/entry_id/appkey/APPKEY/userkey/USERKEY"
+	expectedEntryVoteUrl := "https://a.wykop.pl/entries/vote/entry/999/appkey/APPKEY/userkey/USERKEY"
+	expectedEntryUnvoteUrl := "https://a.wykop.pl/entries/unvote/entry/999/appkey/APPKEY/userkey/USERKEY"
 
-	expectedEntryCommentVoteUrl := "https://a.wykop.pl/entries/vote/comment/entry_id/comment_id/appkey/APPKEY/userkey/USERKEY"
-	expectedEntryCommentUnoteUrl := "https://a.wykop.pl/entries/unvote/comment/entry_id/comment_id/appkey/APPKEY/userkey/USERKEY"
+	expectedEntryCommentVoteUrl := "https://a.wykop.pl/entries/vote/comment/999/666/appkey/APPKEY/userkey/USERKEY"
+	expectedEntryCommentUnoteUrl := "https://a.wykop.pl/entries/unvote/comment/999/666/appkey/APPKEY/userkey/USERKEY"
 
-	expectedEntryFavoriteUrl := "https://a.wykop.pl/entries/favorite/entry_id/appkey/APPKEY/userkey/USERKEY"
+	expectedEntryFavoriteUrl := "https://a.wykop.pl/entries/favorite/999/appkey/APPKEY/userkey/USERKEY"
 
 	appKey := "APPKEY"
-	entryId := "entry_id"
-	commentId := "comment_id"
+	entryId := 999
+	commentId := 666
 	userKey := "USERKEY"
 
 	assert.Equal(t, expectedGetEntryUrl, getEntryUrl(entryId, appKey))
@@ -48,7 +47,7 @@ func TestWykopHandlerGetEntry(t *testing.T) {
 	defer teardownTestCase(t)
 	wh.LoginToWypok()
 
-	entry, wypokError := wh.GetEntry("0")
+	entry, wypokError := wh.GetEntry(0)
 	assert.NotNil(t, wypokError)
 	assert.Equal(t, 2, wypokError.ErrorObject.Code)
 	assert.Equal(t, "Niepoprawne parametry", wypokError.ErrorObject.Message)
@@ -71,7 +70,7 @@ func TestWykopHandlerPostEntry(t *testing.T) {
 	assert.Nil(t, getEntryError)
 	assert.NotEmpty(t, entry.Author)
 
-	assert.Equal(t, strconv.Itoa(entry.Id), newEntry.Id)
+	assert.Equal(t, entry.Id, newEntry.Id)
 
 	deleteEntryResponse, deleteEntryError := wh.DeleteEntry(newEntry.Id)
 	assert.Nil(t, deleteEntryError)
@@ -233,7 +232,7 @@ func TestWykopHandlerUpvoteEntry(t *testing.T) {
 	defer teardownTestCase(t)
 	wh.LoginToWypok()
 
-	voteResponse, voteError := wh.UpvoteEntry("27336289")
+	voteResponse, voteError := wh.UpvoteEntry(27336289)
 	assert.Nil(t, voteError)
 	assert.True(t, voteResponse.Vote > 0)
 }
@@ -243,7 +242,7 @@ func TestWykopHandlerUnvoteEntry(t *testing.T) {
 	defer teardownTestCase(t)
 	wh.LoginToWypok()
 
-	voteResponse, voteError := wh.UnvoteEntry("27336289")
+	voteResponse, voteError := wh.UnvoteEntry(27336289)
 	assert.Nil(t, voteError)
 	assert.True(t, voteResponse.Vote == 0, "This might fail and this is ok.")
 }
@@ -254,12 +253,12 @@ func TestWykopHandlerFavoriteEntry(t *testing.T) {
 	wh.LoginToWypok()
 
 	// add to favorite
-	favResponse, favResponseError := wh.FavoriteEntry("27336289")
+	favResponse, favResponseError := wh.FavoriteEntry(27336289)
 	assert.Nil(t, favResponseError)
 	assert.True(t, favResponse.UserFavorite)
 
 	// re-add to favorite = unfavorite
-	unfavResponse, unfavResponseError := wh.FavoriteEntry("27336289")
+	unfavResponse, unfavResponseError := wh.FavoriteEntry(27336289)
 	assert.Nil(t, unfavResponseError)
 	assert.False(t, unfavResponse.UserFavorite)
 }

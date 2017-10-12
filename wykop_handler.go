@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"github.com/parnurzeal/gorequest"
-	"io/ioutil"
 	"net/url"
 	"strconv"
 )
@@ -26,25 +25,6 @@ type WykopHandler struct {
 	secret        string
 }
 
-func (wh *WykopHandler) PostEntryWithImage(content string, absolutePath string) (entryResponse EntryResponse, wypokError *WykopError) {
-	body := url.Values{}
-	body.Set("body", content)
-
-	urlAddress := getAddEntryUrl() + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
-
-	reqBody := gorequest.New().Post(urlAddress).
-		Set(contentType, mediaTypeFormType).
-		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body")))
-	b, _ := ioutil.ReadFile(absolutePath)
-
-	_, responseBody, _ := reqBody.Send(body).SendFile(b, "", "file").End()
-
-	entryResponse = EntryResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
-
-	return
-}
-
 func (wh *WykopHandler) LoginToWypok() *WykopError {
 
 	responseBody := wh.sendPostRequestForBody(getLoginUrl(wh.appKey))
@@ -52,16 +32,6 @@ func (wh *WykopHandler) LoginToWypok() *WykopError {
 	wh.authResponse = AuthenticationResponse{}
 
 	return wh.getObjectFromJson(responseBody, &wh.authResponse)
-}
-
-func (wh *WykopHandler) UpvoteEntry(entry Entry) (voteResponse VoteResponse, wypokError *WykopError) {
-	urlAddress := getEntryVoteUrl("entry", strconv.Itoa(entry.Id), "") + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
-
-	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
-
-	wypokError = wh.getObjectFromJson(responseBody, &voteResponse)
-
-	return
 }
 
 func (wh *WykopHandler) GetEntriesFromTag(tag string, page int) (tagEntries TagsEntries, wypokError *WykopError) {
@@ -100,69 +70,6 @@ func (wh *WykopHandler) GetProfileEntriesComments(username string, page int) (en
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
 
 	wypokError = wh.getObjectFromJson(responseBody, &entryComments)
-
-	return
-}
-
-func (wh *WykopHandler) DeleteEntryComment(entryId int, commentId int) (commentResponse CommentResponse, wypokError *WykopError) {
-	urlAddress := getDeleteCommentUrl(strconv.Itoa(entryId), strconv.Itoa(commentId)) + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
-
-	responseBody := wh.sendPostRequestForBody(urlAddress)
-
-	wypokError = wh.getObjectFromJson(responseBody, &commentResponse)
-
-	return
-}
-
-func (wh *WykopHandler) DeleteEntry(id int) (entryResponse EntryResponse, wypokError *WykopError) {
-	urlAddress := getDeleteEntryUrl(strconv.Itoa(id)) + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
-
-	responseBody := wh.sendPostRequestForBody(urlAddress)
-
-	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
-
-	return
-}
-
-func (wh *WykopHandler) GetEntry(id int) (entry Entry, wypokError *WykopError) {
-	responseBody := wh.sendPostRequestForBody(getEntryUrl(strconv.Itoa(id)) + appKeyPathElement + wh.appKey)
-
-	wypokError = wh.getObjectFromJson(responseBody, &entry)
-	return
-}
-
-func (wh *WykopHandler) PostEntry(content string) (entryResponse EntryResponse, wypokError *WykopError) {
-	body := url.Values{}
-	body.Set("body", content)
-
-	urlAddress := getAddEntryUrl() + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
-
-	_, responseBody, _ := gorequest.New().Post(urlAddress).
-		Set(contentType, mediaTypeFormType).
-		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body"))).
-		Send(body).
-		End()
-
-	entryResponse = EntryResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
-
-	return
-}
-
-func (wh *WykopHandler) PostEntryWithEmbeddedContent(content *string, embeddedUrl *string) (entryResponse EntryResponse, wykopError *WykopError) {
-	body := url.Values{}
-	body.Set("body", *content)
-	body.Set("embed", *embeddedUrl)
-
-	urlAddress := getAddEntryUrl() + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey
-
-	_, responseBody, _ := gorequest.New().Post(urlAddress).
-		Set(contentType, mediaTypeFormType).
-		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body")+","+body.Get("embed"))).
-		Send(body).
-		End()
-
-	wykopError = wh.getObjectFromJson(responseBody, &entryResponse)
 
 	return
 }

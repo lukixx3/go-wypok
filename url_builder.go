@@ -8,11 +8,18 @@ const (
 	PROFILE_COMMENTS       = "https://a.wykop.pl/profile/comments/"
 	PROFILE_ENTRY_COMMENTS = "https://a.wykop.pl/profile/entriesComments/"
 
-	ENTRY_INDEX          = "https://a.wykop.pl/entries/index/"
-	ENTRY_ADD            = "https://a.wykop.pl/entries/add"
-	ENTRY_DELETE         = "https://a.wykop.pl/entries/delete/"
-	ENTRY_VOTE           = "https://a.wykop.pl/entries/vote/"
-	ENTRY_COMMENT_DELETE = "https://a.wykop.pl/entries/deleteComment/"
+	ENTRY_INDEX          = "https://a.wykop.pl/entries/index/%s/appkey/%s"
+	ENTRY_ADD            = "https://a.wykop.pl/entries/add/appkey/%s/userkey/%s"
+	ENTRY_EDIT           = "https://a.wykop.pl/entries/edit/%s/appkey/%s/userkey/%s"
+	ENTRY_DELETE         = "https://a.wykop.pl/entries/delete/%s/appkey/%s/userkey/%s"
+	ENTRY_ADD_COMMENT    = "https://a.wykop.pl/entries/addComment/%s/appkey/%s/userkey/%s"
+	ENTRY_COMMENT_EDIT   = "https://a.wykop.pl/entries/editComment/%s/%s/appkey/%s/userkey/%s"
+	ENTRY_COMMENT_DELETE = "https://a.wykop.pl/entries/deleteComment/%s/%s/appkey/%s/userkey/%s"
+	ENTRY_VOTE           = "https://a.wykop.pl/entries/vote/entry/%s/appkey/%s/userkey/%s"
+	ENTRY_COMMENT_VOTE   = "https://a.wykop.pl/entries/vote/comment/%s/%s/appkey/%s/userkey/%s"
+	ENTRY_UNVOTE         = "https://a.wykop.pl/entries/unvote/entry/%s/appkey/%s/userkey/%s"
+	ENTRY_COMMENT_UNVOTE = "https://a.wykop.pl/entries/unvote/comment/%s/%s/appkey/%s/userkey/%s"
+	ENTRY_FAVORITE       = "https://a.wykop.pl/entries/favorite/%s/appkey/%s/userkey/%s"
 
 	RANK_INDEX = "https://a.wykop.pl/rank/index/appkey/%s/order/%s"
 
@@ -40,26 +47,6 @@ func getProfileCommentsUrl(username string) string {
 
 func getProfileEntriesCommentsUrl(username string) string {
 	return PROFILE_ENTRY_COMMENTS + username
-}
-
-func getEntryUrl(entry string) string {
-	return ENTRY_INDEX + entry
-}
-
-func getDeleteEntryUrl(entry string) string {
-	return ENTRY_DELETE + entry
-}
-
-func getDeleteCommentUrl(entryId string, commentId string) string {
-	return ENTRY_COMMENT_DELETE + entryId + "/" + commentId
-}
-
-func getAddEntryUrl() string {
-	return ENTRY_ADD
-}
-
-func getEntryVoteUrl(objectType string, entryId string, commentId string) string {
-	return ENTRY_VOTE + objectType + "/" + entryId + "/" + commentId
 }
 
 func getTagEntries(tag string) string {

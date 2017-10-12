@@ -3,7 +3,6 @@ package go_wypok
 import (
 	"github.com/stretchr/testify/assert"
 	"os"
-	"strconv"
 	"testing"
 )
 
@@ -63,47 +62,3 @@ func TestGettingProfileLinksComments(t *testing.T) {
 	}
 }
 
-func TestWykopHandler_PostEntryWithEmbeddedContent(t *testing.T) {
-	teardownTestCase := setupTestCase(t)
-	defer teardownTestCase(t)
-	wh.LoginToWypok()
-
-	content := "Test"
-	embed := "http://www.unixstickers.com/image/data/stickers/golang/golang.sh.png"
-
-	response, wykopError := wh.PostEntryWithEmbeddedContent(&content, &embed)
-	assert.Nil(t, wykopError)
-	assert.NotNil(t, response)
-	assert.NotNil(t, response.Id)
-
-	entryId, _ := strconv.Atoi(response.Id)
-	deleteResponse, deleteResponseError := wh.DeleteEntry(entryId)
-	assert.Nil(t, deleteResponseError, "Expected no error deleting entry")
-	assert.NotNil(t, deleteResponse)
-
-	deletedEntryId, _ := strconv.Atoi(deleteResponse.Id)
-	assert.Equal(t, entryId, deletedEntryId)
-}
-
-//func TestUploadingEntryWithImage(t *testing.T) {
-//	teardownTestCase := setupTestCase(t)
-//	defer teardownTestCase(t)
-//	wh.LoginToWypok()
-//
-//	entryBody := "test"
-//
-//	entryResponse, wypokError := wh.PostEntryWithImage(entryBody, "/home/agilob/Pictures/penguin_wings.jpg")
-//	assert.Nil(t, wypokError)
-//	assert.NotNil(t, entryResponse.Id)
-//
-//	entryId, _ := strconv.Atoi(entryResponse.Id)
-//	entry, errorGettingEntry := wh.GetEntry(entryId)
-//	assert.Nil(t, errorGettingEntry, "Expected no error getting entry that was created before")
-//	assert.Equal(t, entryBody, entry.Body, "Message body is not what was submitted")
-//
-//	// assert here that entry.Embed is populated
-//
-//	deleteResponse, deleteResponseError := wh.DeleteEntry(entryId)
-//	assert.Nil(t, deleteResponseError, "Expected no error deleting entry")
-//	assert.Equal(t, entryResponse.Id, deleteResponse.Id)
-//}

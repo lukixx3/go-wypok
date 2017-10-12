@@ -85,66 +85,6 @@ func (value *WykopShitUserVote) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-type Entry struct {
-	Id                int
-	Author            string
-	AuthorAvatar      string        `json:"author_avatar"`
-	AuthorAvatarBig   string        `json:"author_big"`
-	AuthorAvatarMed   string        `json:"author_med"`
-	AuthorAvatarLo    string        `json:"author_lo"`
-	AuthorGroup       int           `json:"author_group"`
-	AuthorSex         string        `json:"author_sex"`
-	Date              WypokShitDate `json:"date"`
-	Body              string
-	Source            string
-	Url               string
-	Receiver          string
-	ReceiverAvatar    string `json:"receiver_avatar"`
-	ReceiverAvatarBig string `json:"receiver_avatar_big"`
-	ReceiverAvatarMed string `json:"receiver_avatar_med"`
-	ReceiverAvatarLo  string `json:"receiver_avatar_lo"`
-	ReceiverGroup     string `json:"receiver_group"`
-	ReceiverSex       string `json:"receiver_sex"`
-	Comments          []EntryComment
-	Blocked           bool
-	VoteCount         int `json:"vote_count"`
-	UserVote          int `json:"user_vote"`
-	Voters            []Voter
-	UserFavorite      bool   `json:"user_favorite"`
-	TypeE             string `json:"type"`
-	Embed             Embed
-	Deleted           bool
-	ViolationUrl      string `json:"violation_url"`
-	CanComment        bool   `json:"can_comment"`
-	App               string
-	CommentCount      int `json:"comment_count"`
-}
-
-type EntryComment struct {
-	ID              int           `json:"id"`
-	Author          string        `json:"author"`
-	AuthorAvatar    string        `json:"author_avatar"`
-	AuthorAvatarBig string        `json:"author_avatar_big"`
-	AuthorAvatarMed string        `json:"author_avatar_med"`
-	AuthorAvatarLo  string        `json:"author_avatar_lo"`
-	AuthorGroup     int           `json:"author_group"`
-	AuthorSex       string        `json:"author_sex"`
-	Date            WypokShitDate `json:"date"`
-	Body            string        `json:"body"`
-	Source          string        `json:"source"`
-	EntryID         int           `json:"entry_id"`
-	Blocked         bool          `json:"blocked"`
-	Deleted         bool          `json:"deleted"`
-	VoteCount       int           `json:"vote_count"`
-	UserVote        int           `json:"user_vote"`
-	Voters          []Voter
-	Embed           Embed  `json:"embed"`
-	Type            string `json:"type"`
-	App             string `json:"app"`
-	ViolationURL    string `json:"violation_url"`
-	Entry           Entry
-}
-
 type WypokShitDate struct {
 	time.Time
 }
@@ -208,6 +148,10 @@ type VoteResponse struct {
 	//Voters string
 }
 
+type FavoriteResponse struct {
+	UserFavorite bool `json:"user_favorite"`
+}
+
 type AuthenticationResponse struct {
 	Login        string
 	Email        string
@@ -216,7 +160,7 @@ type AuthenticationResponse struct {
 }
 
 type EntryResponse struct {
-	// for some stupid reason wypok returns string here, convert it manually to int
+	// for some stupid reason wypok returns string here
 	Id string `json:"id"`
 }
 

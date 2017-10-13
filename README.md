@@ -105,11 +105,11 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [ ] Comments
  - [ ] Entries
  - [ ] EntriesComments
-15. Favorites // In progress
- - [x] Index (GetFavorites)
- - [ ] Comments
- - [ ] Entries
- - [ ] Lists
+15. Favorites
+ - [x] Index (GetFavoritesListLinks)
+ - [x] Comments (GetFavoritesComments)
+ - [x] Entries (GetFavoritesEntries)
+ - [x] Lists (GetFavoritesLists)
 16. Stream
  - [ ] Index
  - [ ] Hot

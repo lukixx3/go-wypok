@@ -28,7 +28,10 @@ const (
 
 	ENTRIES_FROM_TAG = "https://a.wykop.pl/tag/entries/"
 
-	FAVORITES_INDEX = "https://a.wykop.pl/favorites/index/%s/appkey/%s/userkey/%s"
+	FAVORITES_INDEX    = "https://a.wykop.pl/favorites/index/%s/appkey/%s/userkey/%s"
+	FAVORITES_LISTS    = "https://a.wykop.pl/favorites/lists/appkey/%s/userkey/%s"
+	FAVORITES_COMMENTS = "https://a.wykop.pl/favorites/comments/appkey/%s/userkey/%s"
+	FAVORITES_ENTRIES  = "https://a.wykop.pl/favorites/entries/appkey/%s/userkey/%s"
 )
 
 func getLoginUrl(appkey string) string {

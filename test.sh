@@ -2,7 +2,6 @@
 
 environment_filepath="$(pwd)/.environment_variables"
 required_variables=( "WYKOPAPPKEY" "WYKOPSECRET" "WYKOPCONNECTIONKEY" )
-optional_variables=( "FAVORITES_ID" )
 
 if [ -f "$environment_filepath" ]; then
     source $environment_filepath
@@ -11,12 +10,6 @@ if [ -f "$environment_filepath" ]; then
         if [ -z ${!v} ]; then
            echo "'$v' has not been set"
            exit 1
-        fi
-    done
-
-    for v in "${optional_variables[@]}"; do
-        if [ -z ${!v} ]; then
-           echo "Optional variable '$v' has not been set you won't be able to proply test all functions"
         fi
     done
 

@@ -13,7 +13,12 @@ if [ -f "$environment_filepath" ]; then
         fi
     done
 
-    go test -v
+    params="-v"
+    if [ "$1" != "" ]; then
+        params="$@"
+    fi
+
+    go test $params
 else
     echo "You need to create '$environment_filepath' file with"
     echo "environment variables for test uses i. e.:"

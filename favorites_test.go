@@ -52,3 +52,26 @@ func TestWykopHandlerGetFavoritesEntries(t *testing.T) {
 	assert.Nil(t, wypokError, "Expected that error will be nil")
 	assert.NotEmpty(t, lists, "Expected that favorites list won't be empty")
 }
+
+func TestBuildingFavoritesURLs(t *testing.T) {
+	appKey := "APPKEY"
+	favoritesId := 999
+	userKey := "USERKEY"
+
+	assert.Equal(t,
+		"https://a.wykop.pl/favorites/index/999/appkey/APPKEY/userkey/USERKEY",
+		getFavoritesListLinksURL(favoritesId, appKey, userKey),
+	)
+	assert.Equal(t,
+		"https://a.wykop.pl/favorites/lists/appkey/APPKEY/userkey/USERKEY",
+		getFavoritesListsURL(appKey, userKey),
+	)
+	assert.Equal(t,
+		"https://a.wykop.pl/favorites/comments/appkey/APPKEY/userkey/USERKEY",
+		getFavoritesCommentsURL(appKey, userKey),
+	)
+	assert.Equal(t,
+		"https://a.wykop.pl/favorites/entries/appkey/APPKEY/userkey/USERKEY",
+		getFavoritesEntriesURL(appKey, userKey),
+	)
+}

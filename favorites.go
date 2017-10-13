@@ -2,6 +2,13 @@ package go_wypok
 
 import "fmt"
 
+// FavoritesList contains properties of single favorites list
+type FavoritesList struct {
+	Id     int    `json:"id"`
+	Name   string `json:"name"`
+	Public bool   `json:"is_public"`
+}
+
 // GetFavoritesLists returns user favorites lists
 // It requires privileges for profile.
 func (wh *WykopHandler) GetFavoritesLists() (lists []FavoritesList, wypokError *WykopError) {
@@ -13,9 +20,9 @@ func (wh *WykopHandler) GetFavoritesLists() (lists []FavoritesList, wypokError *
 	return
 }
 
-// GetFavoritesListLinks returns user favorites links.
+// GetFavoritesListLinks returns user favorites list links.
 // It requires privileges for profile.
-func (wh *WykopHandler) GetFavoritesListLinks(id string) (links []Link, wypokError *WykopError) {
+func (wh *WykopHandler) GetFavoritesListLinks(id int) (links []Link, wypokError *WykopError) {
 	responseBody := wh.sendPostRequestForBody(
 		getFavoritesListLinksURL(id, wh.appKey, wh.authResponse.Userkey),
 	)
@@ -50,7 +57,7 @@ func getFavoritesListsURL(appKey, userkey string) string {
 	return fmt.Sprintf(FAVORITES_LISTS, appKey, userkey)
 }
 
-func getFavoritesListLinksURL(listID, appKey, userkey string) string {
+func getFavoritesListLinksURL(listID int, appKey, userkey string) string {
 	return fmt.Sprintf(FAVORITES_INDEX, listID, appKey, userkey)
 }
 

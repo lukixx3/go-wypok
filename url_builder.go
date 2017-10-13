@@ -27,6 +27,8 @@ const (
 	UPCOMING_PAGE = "https://a.wykop.pl/links/upcoming/"
 
 	ENTRIES_FROM_TAG = "https://a.wykop.pl/tag/entries/"
+
+	FAVORITES_INDEX = "https://a.wykop.pl/favorites/index/%s/appkey/%s/userkey/%s"
 )
 
 func getLoginUrl(appkey string) string {

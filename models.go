@@ -1,6 +1,7 @@
 package go_wypok
 
 import (
+	"strconv"
 	"time"
 )
 
@@ -160,13 +161,48 @@ type AuthenticationResponse struct {
 }
 
 type EntryResponse struct {
+	Id int
+}
+
+type CommentResponse struct {
+	Id int
+}
+
+// WTF wykop.pl API is so retarded. Everywhere it returns int as Id on any response class
+// by comment/entry submitted response returns id in quotes "", literally - integer inside quotes,
+// which makes it a string, so these struct wrapper classes unmarshall it to string
+// then the struct is converted to a new one, where id is an int. bravo białkov. bravo.
+// thanks for reading this rant, please enjoy comment at the bottom of this file.
+type stringEntryResponse struct {
 	// for some stupid reason wypok returns string here
 	Id string `json:"id"`
 }
 
-type CommentResponse struct {
+type stringCommentResponse struct {
 	// and here, it should be int
 	Id string `json:"id"`
+}
+
+func newEntryResponse(stringIdResponse stringEntryResponse) EntryResponse {
+	entryResponse := EntryResponse{}
+	theId, err := strconv.Atoi(stringIdResponse.Id)
+	if err != nil {
+		entryResponse.Id = 0
+	} else {
+		entryResponse.Id = theId
+	}
+	return entryResponse
+}
+
+func newCommentResponse(stringIdResponse stringCommentResponse) CommentResponse {
+	commentResponse := CommentResponse{}
+	theId, err := strconv.Atoi(stringIdResponse.Id)
+	if err != nil {
+		commentResponse.Id = 0
+	} else {
+		commentResponse.Id = theId
+	}
+	return commentResponse
 }
 
 type WykopError struct {

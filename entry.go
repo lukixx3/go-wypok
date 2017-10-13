@@ -84,7 +84,7 @@ func (m UpvoteType) String() string {
 	return upvoteTypes[m-1]
 }
 
-func (wh *WykopHandler) GetEntry(id string) (entry Entry, wypokError *WykopError) {
+func (wh *WykopHandler) GetEntry(id int) (entry Entry, wypokError *WykopError) {
 	urlAddress := getEntryUrl(id, wh.appKey)
 
 	responseBody := wh.sendPostRequestForBody(urlAddress)
@@ -104,12 +104,10 @@ func (wh *WykopHandler) PostEntry(content string) (entryResponse EntryResponse, 
 		Send(body).
 		End()
 
-	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
-
-	return
+	return wh.getResponseBodyAsEntryResponse(responseBody)
 }
 
-func (wh *WykopHandler) PostEntryWithEmbeddedContent(content string, embeddedUrl string) (entryResponse EntryResponse, wykopError *WykopError) {
+func (wh *WykopHandler) PostEntryWithEmbeddedContent(content string, embeddedUrl string) (entryResponse EntryResponse, wypokError *WykopError) {
 	urlAddress := getAddEntryUrl(wh.appKey, wh.authResponse.Userkey)
 
 	body := url.Values{}
@@ -121,9 +119,7 @@ func (wh *WykopHandler) PostEntryWithEmbeddedContent(content string, embeddedUrl
 		Send(body).
 		End()
 
-	wykopError = wh.getObjectFromJson(responseBody, &entryResponse)
-
-	return
+	return wh.getResponseBodyAsEntryResponse(responseBody)
 }
 
 func (wh *WykopHandler) PostEntryWithImage(content string, absolutePath string) (entryResponse EntryResponse, wypokError *WykopError) {
@@ -138,12 +134,10 @@ func (wh *WykopHandler) PostEntryWithImage(content string, absolutePath string) 
 
 	_, responseBody, _ := reqBody.Send(body).SendFile(b, "", "file").End()
 
-	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
-
-	return
+	return wh.getResponseBodyAsEntryResponse(responseBody)
 }
 
-func (wh *WykopHandler) EditEntry(entryId string, content string) (entryResponse EntryResponse, wypokError *WykopError) {
+func (wh *WykopHandler) EditEntry(entryId int, content string) (entryResponse EntryResponse, wypokError *WykopError) {
 	urlAddress := getEditEntryUrl(entryId, wh.appKey, wh.authResponse.Userkey)
 
 	body := url.Values{}
@@ -154,12 +148,10 @@ func (wh *WykopHandler) EditEntry(entryId string, content string) (entryResponse
 		Send(body).
 		End()
 
-	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
-
-	return
+	return wh.getResponseBodyAsEntryResponse(responseBody)
 }
 
-func (wh *WykopHandler) AddEntryComment(entryId string, comment string) (commentResponse CommentResponse, wypokError *WykopError) {
+func (wh *WykopHandler) AddEntryComment(entryId int, comment string) (commentResponse CommentResponse, wypokError *WykopError) {
 	urlAddress := getEntryAddCommentUrl(entryId, wh.appKey, wh.authResponse.Userkey)
 
 	body := url.Values{}
@@ -170,12 +162,10 @@ func (wh *WykopHandler) AddEntryComment(entryId string, comment string) (comment
 		Send(body).
 		End()
 
-	wypokError = wh.getObjectFromJson(responseBody, &commentResponse)
-
-	return
+	return wh.getResponseBodyAsCommentResponse(responseBody)
 }
 
-func (wh *WykopHandler) AddEntryCommentWithEmbeddedContent(entryId string, comment string, embeddedUrl string) (commentResponse CommentResponse, wypokError *WykopError) {
+func (wh *WykopHandler) AddEntryCommentWithEmbeddedContent(entryId int, comment string, embeddedUrl string) (commentResponse CommentResponse, wypokError *WykopError) {
 	urlAddress := getEntryAddCommentUrl(entryId, wh.appKey, wh.authResponse.Userkey)
 
 	body := url.Values{}
@@ -187,12 +177,10 @@ func (wh *WykopHandler) AddEntryCommentWithEmbeddedContent(entryId string, comme
 		Send(body).
 		End()
 
-	wypokError = wh.getObjectFromJson(responseBody, &commentResponse)
-
-	return
+	return wh.getResponseBodyAsCommentResponse(responseBody)
 }
 
-func (wh *WykopHandler) EditEntryComment(entryId string, commentId string, comment string) (commentResponse CommentResponse, wypokError *WykopError) {
+func (wh *WykopHandler) EditEntryComment(entryId int, commentId int, comment string) (commentResponse CommentResponse, wypokError *WykopError) {
 	urlAddress := getEditEntryCommentUrl(entryId, commentId, wh.appKey, wh.authResponse.Userkey)
 
 	body := url.Values{}
@@ -203,33 +191,27 @@ func (wh *WykopHandler) EditEntryComment(entryId string, commentId string, comme
 		Send(body).
 		End()
 
-	wypokError = wh.getObjectFromJson(responseBody, &commentResponse)
-
-	return
+	return wh.getResponseBodyAsCommentResponse(responseBody)
 }
 
-func (wh *WykopHandler) DeleteEntryComment(entryId string, commentId string) (commentResponse CommentResponse, wypokError *WykopError) {
+func (wh *WykopHandler) DeleteEntryComment(entryId int, commentId int) (commentResponse CommentResponse, wypokError *WykopError) {
 	urlAddress := getDeleteCommentUrl(entryId, commentId, wh.appKey, wh.authResponse.Userkey)
 
 	responseBody := wh.sendPostRequestForBody(urlAddress)
 
-	wypokError = wh.getObjectFromJson(responseBody, &commentResponse)
-
-	return
+	return wh.getResponseBodyAsCommentResponse(responseBody)
 }
 
-func (wh *WykopHandler) DeleteEntry(id string) (entryResponse EntryResponse, wypokError *WykopError) {
+func (wh *WykopHandler) DeleteEntry(id int) (entryResponse EntryResponse, wypokError *WykopError) {
 	urlAddress := getDeleteEntryUrl(id, wh.appKey, wh.authResponse.Userkey)
 
 	responseBody := wh.sendPostRequestForBody(urlAddress)
 
-	wypokError = wh.getObjectFromJson(responseBody, &entryResponse)
-
-	return
+	return wh.getResponseBodyAsEntryResponse(responseBody)
 }
 
-func (wh *WykopHandler) UpvoteEntry(entryId string) (voteResponse VoteResponse, wypokError *WykopError) {
-	urlAddress := getEntryVoteUrl(entry, entryId, "", wh.appKey, wh.authResponse.Userkey)
+func (wh *WykopHandler) UpvoteEntry(entryId int) (voteResponse VoteResponse, wypokError *WykopError) {
+	urlAddress := getEntryVoteUrl(entry, entryId, -1, wh.appKey, wh.authResponse.Userkey)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
 
@@ -238,7 +220,7 @@ func (wh *WykopHandler) UpvoteEntry(entryId string) (voteResponse VoteResponse, 
 	return
 }
 
-func (wh *WykopHandler) UpvoteEntryComment(entryId string, commentId string) (voteResponse VoteResponse, wypokError *WykopError) {
+func (wh *WykopHandler) UpvoteEntryComment(entryId int, commentId int) (voteResponse VoteResponse, wypokError *WykopError) {
 	urlAddress := getEntryVoteUrl(entry, entryId, commentId, wh.appKey, wh.authResponse.Userkey)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
@@ -248,7 +230,7 @@ func (wh *WykopHandler) UpvoteEntryComment(entryId string, commentId string) (vo
 	return
 }
 
-func (wh *WykopHandler) UnvoteEntryComment(entryId string, commentId string) (voteResponse VoteResponse, wypokError *WykopError) {
+func (wh *WykopHandler) UnvoteEntryComment(entryId int, commentId int) (voteResponse VoteResponse, wypokError *WykopError) {
 	urlAddress := getEntryUnvoteUrl(entry, entryId, commentId, wh.appKey, wh.authResponse.Userkey)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
@@ -258,8 +240,8 @@ func (wh *WykopHandler) UnvoteEntryComment(entryId string, commentId string) (vo
 	return
 }
 
-func (wh *WykopHandler) UnvoteEntry(entryId string) (voteResponse VoteResponse, wypokError *WykopError) {
-	urlAddress := getEntryUnvoteUrl(entry, entryId, "", wh.appKey, wh.authResponse.Userkey)
+func (wh *WykopHandler) UnvoteEntry(entryId int) (voteResponse VoteResponse, wypokError *WykopError) {
+	urlAddress := getEntryUnvoteUrl(entry, entryId, 0, wh.appKey, wh.authResponse.Userkey)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
 
@@ -268,7 +250,7 @@ func (wh *WykopHandler) UnvoteEntry(entryId string) (voteResponse VoteResponse, 
 	return
 }
 
-func (wh *WykopHandler) FavoriteEntry(entryId string) (favoriteResponse FavoriteResponse, wypokError *WykopError) {
+func (wh *WykopHandler) FavoriteEntry(entryId int) (favoriteResponse FavoriteResponse, wypokError *WykopError) {
 	urlAddress := getEntryFavoriteUrl(entryId, wh.appKey, wh.authResponse.Userkey)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
@@ -278,35 +260,35 @@ func (wh *WykopHandler) FavoriteEntry(entryId string) (favoriteResponse Favorite
 	return
 }
 
-func getEntryUrl(entry string, appKey string) string {
-	return fmt.Sprintf(ENTRY_INDEX, entry, appKey)
+func getEntryUrl(entryId int, appKey string) string {
+	return fmt.Sprintf(ENTRY_INDEX, entryId, appKey)
 }
 
 func getAddEntryUrl(appKey string, userKey string) string {
 	return fmt.Sprintf(ENTRY_ADD, appKey, userKey)
 }
 
-func getEditEntryUrl(entryId string, appKey string, userKey string) string {
+func getEditEntryUrl(entryId int, appKey string, userKey string) string {
 	return fmt.Sprintf(ENTRY_EDIT, entryId, appKey, userKey)
 }
 
-func getDeleteEntryUrl(entryId string, appKey string, userKey string) string {
+func getDeleteEntryUrl(entryId int, appKey string, userKey string) string {
 	return fmt.Sprintf(ENTRY_DELETE, entryId, appKey, userKey)
 }
 
-func getEntryAddCommentUrl(entryId string, appKey string, userKey string) string {
+func getEntryAddCommentUrl(entryId int, appKey string, userKey string) string {
 	return fmt.Sprintf(ENTRY_ADD_COMMENT, entryId, appKey, userKey)
 }
 
-func getEditEntryCommentUrl(entryId string, commentId string, appKey string, userKey string) string {
+func getEditEntryCommentUrl(entryId int, commentId int, appKey string, userKey string) string {
 	return fmt.Sprintf(ENTRY_COMMENT_EDIT, entryId, commentId, appKey, userKey)
 }
 
-func getDeleteCommentUrl(entryId string, commentId string, appKey string, userKey string) string {
+func getDeleteCommentUrl(entryId int, commentId int, appKey string, userKey string) string {
 	return fmt.Sprintf(ENTRY_COMMENT_DELETE, entryId, commentId, appKey, userKey)
 }
 
-func getEntryVoteUrl(voteType UpvoteType, entryId string, commentId string, appKey string, userKey string) string {
+func getEntryVoteUrl(voteType UpvoteType, entryId int, commentId int, appKey string, userKey string) string {
 	if voteType == entry {
 		return fmt.Sprintf(ENTRY_VOTE, entryId, appKey, userKey)
 	} else {
@@ -314,7 +296,7 @@ func getEntryVoteUrl(voteType UpvoteType, entryId string, commentId string, appK
 	}
 }
 
-func getEntryUnvoteUrl(voteType UpvoteType, entryId string, commentId string, appKey string, userKey string) string {
+func getEntryUnvoteUrl(voteType UpvoteType, entryId int, commentId int, appKey string, userKey string) string {
 	if voteType == entry {
 		return fmt.Sprintf(ENTRY_UNVOTE, entryId, appKey, userKey)
 	} else {
@@ -322,6 +304,20 @@ func getEntryUnvoteUrl(voteType UpvoteType, entryId string, commentId string, ap
 	}
 }
 
-func getEntryFavoriteUrl(entryId string, appKey string, userKey string) string {
+func getEntryFavoriteUrl(entryId int, appKey string, userKey string) string {
 	return fmt.Sprintf(ENTRY_FAVORITE, entryId, appKey, userKey)
+}
+
+func (wh *WykopHandler) getResponseBodyAsEntryResponse(responseBody string) (commentResponse EntryResponse, wypokError *WykopError) {
+	stringIdResponse := stringEntryResponse{}
+	wypokError = wh.getObjectFromJson(responseBody, &stringIdResponse)
+	commentResponse = newEntryResponse(stringIdResponse)
+	return
+}
+
+func (wh *WykopHandler) getResponseBodyAsCommentResponse(responseBody string) (commentResponse CommentResponse, wypokError *WykopError) {
+	stringIdResponse := stringCommentResponse{}
+	wypokError = wh.getObjectFromJson(responseBody, &stringIdResponse)
+	commentResponse = newCommentResponse(stringIdResponse)
+	return
 }

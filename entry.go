@@ -309,15 +309,15 @@ func getEntryFavoriteUrl(entryId int, appKey string, userKey string) string {
 }
 
 func (wh *WykopHandler) getResponseBodyAsEntryResponse(responseBody string) (commentResponse EntryResponse, wypokError *WykopError) {
-	fuckingResponse := fuckingStringEntryResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &fuckingResponse)
-	commentResponse = newEntryResponse(fuckingResponse)
+	stringIdResponse := stringEntryResponse{}
+	wypokError = wh.getObjectFromJson(responseBody, &stringIdResponse)
+	commentResponse = newEntryResponse(stringIdResponse)
 	return
 }
 
 func (wh *WykopHandler) getResponseBodyAsCommentResponse(responseBody string) (commentResponse CommentResponse, wypokError *WykopError) {
-	fuckingResponse := fuckingStringCommentResponse{}
-	wypokError = wh.getObjectFromJson(responseBody, &fuckingResponse)
-	commentResponse = newCommentResponse(fuckingResponse)
+	stringIdResponse := stringCommentResponse{}
+	wypokError = wh.getObjectFromJson(responseBody, &stringIdResponse)
+	commentResponse = newCommentResponse(stringIdResponse)
 	return
 }

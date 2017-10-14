@@ -4,6 +4,10 @@
 # go-wypok
 Obsługa API wykopu w go
 
+```
+go get gitlab.com/agilob/go-wypok
+```
+
 # Wspierane metody API w kolejnosi identycznej jak na stronie [dokumentacji](https://www.wykop.pl/dla-programistow/dokumentacja/)
 
 W nawiasie podana jest metoda obsługująca dane endpoint.

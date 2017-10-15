@@ -1,5 +1,7 @@
 package go_wypok
 
+import "fmt"
+
 const (
 	LOGIN_URL = "https://a.wykop.pl/user/login"
 
@@ -27,6 +29,7 @@ const (
 	UPCOMING_PAGE = "https://a.wykop.pl/links/upcoming/"
 
 	ENTRIES_FROM_TAG = "https://a.wykop.pl/tag/entries/"
+	PM_URL_PATTERN = "https://a.wykop.pl/pm/%s/appkey/%s/userkey/%s"
 
 	FAVORITES_INDEX    = "https://a.wykop.pl/favorites/index/%d/appkey/%s/userkey/%s"
 	FAVORITES_LISTS    = "https://a.wykop.pl/favorites/lists/appkey/%s/userkey/%s"
@@ -56,4 +59,21 @@ func getProfileEntriesCommentsUrl(username string) string {
 
 func getTagEntries(tag string) string {
 	return ENTRIES_FROM_TAG + tag
+}
+
+func getConversationsListUrl(wh *WykopHandler) string {
+	return fmt.Sprintf(PM_URL_PATTERN, "ConversationsList", wh.appKey, wh.authResponse.Userkey)
+}
+
+func getConversationUrl(conversation *string, wh *WykopHandler) string {
+	return fmt.Sprintf(PM_URL_PATTERN, "Conversation/" + *conversation, wh.appKey, wh.authResponse.Userkey)
+}
+
+func getDeleteConversationUrl(conversation *string, wh *WykopHandler) string {
+	return fmt.Sprintf(PM_URL_PATTERN, "DeleteConversation/" + *conversation, wh.appKey, wh.authResponse.Userkey)
+}
+
+
+func getSendMessageUrl(to *string, wh *WykopHandler) string {
+	return fmt.Sprintf(PM_URL_PATTERN, "SendMessage/" + *to, wh.appKey, wh.authResponse.Userkey)
 }

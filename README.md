@@ -102,6 +102,7 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [x] Vote (UpvoteEntry)
  - [x] Unvote (UnvoteEntry)
  - [x] Favorite (FavoriteEntry)
+ - [ ] Polls - in progress
 13. Rank
  - [x] Index
 14. Observatory
@@ -125,7 +126,7 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [ ] Unobserve
  - [ ] Block
  - [ ] Unblock
-18. PM // In progress
+18. PM // In review
  - [ ] ConversationsList
  - [ ] Conversation
  - [ ] SendMessage

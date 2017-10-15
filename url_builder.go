@@ -33,8 +33,6 @@ const (
 	FAVORITES_LISTS    = "https://a.wykop.pl/favorites/lists/appkey/%s/userkey/%s"
 	FAVORITES_COMMENTS = "https://a.wykop.pl/favorites/comments/appkey/%s/userkey/%s"
 	FAVORITES_ENTRIES  = "https://a.wykop.pl/favorites/entries/appkey/%s/userkey/%s"
-
-	PM_URL_PATTERN   = "https://a.wykop.pl/pm/%s/appkey/%s/userkey/%s"
 )
 
 func getLoginUrl(appkey string) string {
@@ -59,21 +57,4 @@ func getProfileEntriesCommentsUrl(username string) string {
 
 func getTagEntries(tag string) string {
 	return ENTRIES_FROM_TAG + tag
-}
-
-func getConversationsListUrl(wh *WykopHandler) string {
-	return fmt.Sprintf(PM_URL_PATTERN, "ConversationsList", wh.appKey, wh.authResponse.Userkey)
-}
-
-func getConversationUrl(conversation *string, wh *WykopHandler) string {
-	return fmt.Sprintf(PM_URL_PATTERN, "Conversation/" + *conversation, wh.appKey, wh.authResponse.Userkey)
-}
-
-func getDeleteConversationUrl(conversation *string, wh *WykopHandler) string {
-	return fmt.Sprintf(PM_URL_PATTERN, "DeleteConversation/" + *conversation, wh.appKey, wh.authResponse.Userkey)
-}
-
-
-func getSendMessageUrl(to *string, wh *WykopHandler) string {
-	return fmt.Sprintf(PM_URL_PATTERN, "SendMessage/" + *to, wh.appKey, wh.authResponse.Userkey)
 }

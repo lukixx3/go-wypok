@@ -213,31 +213,3 @@ type WykopErrorMessage struct {
 	Code    int
 	Message string
 }
-
-type Conversation struct {
-	Author          string    `json:author`
-	LastUpdate      time.Time `json:last_update`
-	AuthorAvatar    string    `json:author_avatar`
-	AuthorAvatarBig string    `json:author_avatar_big`
-	AuthorAvatarMed string    `json:author_avatar_med`
-	AuthorAvatarLow string    `json:author_avatar_Lo`
-	AuthorGroup     int       `json:author_group`
-	AuthorSex       string    `json:author_sex`
-	Status          string    `json:status`
-}
-
-type PrivateMessage struct {
-	Author          string    `json:author`
-	AuthorAvatar    string    `json:author_avatar`
-	AuthorAvatarBig string    `json:author_avatar_big`
-	AuthorAvatarMed string    `json:author_avatar_med`
-	AuthorAvatarLow string    `json:author_avatar_Lo`
-	AuthorGroup     int       `json:author_group`
-	AuthorSex       string    `json:author_sex`
-	Status          string    `json:status`
-	Date            time.Time `json:date`
-	Content         string    `json:body`
-	Direction       string    `json:direction`
-	Embed           string    `json:embed`
-	App             string    `json:app`
-}

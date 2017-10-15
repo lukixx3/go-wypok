@@ -1,7 +1,5 @@
 package go_wypok
 
-import "fmt"
-
 const (
 	LOGIN_URL = "https://a.wykop.pl/user/login"
 

@@ -27,7 +27,6 @@ const (
 	UPCOMING_PAGE = "https://a.wykop.pl/links/upcoming/"
 
 	ENTRIES_FROM_TAG = "https://a.wykop.pl/tag/entries/"
-
 	FAVORITES_INDEX    = "https://a.wykop.pl/favorites/index/%d/appkey/%s/userkey/%s"
 	FAVORITES_LISTS    = "https://a.wykop.pl/favorites/lists/appkey/%s/userkey/%s"
 	FAVORITES_COMMENTS = "https://a.wykop.pl/favorites/comments/appkey/%s/userkey/%s"

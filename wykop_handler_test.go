@@ -61,4 +61,3 @@ func TestGettingProfileLinksComments(t *testing.T) {
 		assert.NotEqual(t, "", comment.Body, "Expected body of a comment to be populated")
 	}
 }
-

@@ -1,12 +1,15 @@
 package go_wypok
 
-const (
-	LOGIN_URL = "https://a.wykop.pl/user/login"
+import "fmt"
 
-	PROFILE_INDEX          = "https://a.wykop.pl/profile/index/"
-	PROFILE_ENTRIES        = "https://a.wykop.pl/profile/entries/"
-	PROFILE_COMMENTS       = "https://a.wykop.pl/profile/comments/"
-	PROFILE_ENTRY_COMMENTS = "https://a.wykop.pl/profile/entriesComments/"
+const (
+	LOGIN_URL = "https://a.wykop.pl/user/login/appkey/%s"
+
+	PROFILE_INDEX          = "https://a.wykop.pl/profile/index/%s/appkey/%s"
+	PROFILE_FAVORITES      = "https://a.wykop.pl/profile/favorites/%s/appkey/%s/userkey/%s"
+	PROFILE_ENTRIES        = "https://a.wykop.pl/profile/entries/%s/appkey/%s/userkey/%s/page/%d"
+	PROFILE_COMMENTS       = "https://a.wykop.pl/profile/comments/%s/appkey/%s/userkey/%s/page/%d"
+	PROFILE_ENTRY_COMMENTS = "https://a.wykop.pl/profile/entriesComments/%s/appkey/%s/userkey/%s/page/%d"
 
 	ENTRY_INDEX          = "https://a.wykop.pl/entries/index/%d/appkey/%s"
 	ENTRY_ADD            = "https://a.wykop.pl/entries/add/appkey/%s/userkey/%s"
@@ -35,23 +38,7 @@ const (
 )
 
 func getLoginUrl(appkey string) string {
-	return LOGIN_URL + "/appkey/" + appkey
-}
-
-func getProfileUrl(username string) string {
-	return PROFILE_INDEX + username
-}
-
-func getProfileEntriesUrl(username string) string {
-	return PROFILE_ENTRIES + username
-}
-
-func getProfileCommentsUrl(username string) string {
-	return PROFILE_COMMENTS + username
-}
-
-func getProfileEntriesCommentsUrl(username string) string {
-	return PROFILE_ENTRY_COMMENTS + username
+	return fmt.Sprintf(LOGIN_URL, appkey)
 }
 
 func getTagEntries(tag string) string {

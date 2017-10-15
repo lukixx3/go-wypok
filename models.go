@@ -5,38 +5,6 @@ import (
 	"time"
 )
 
-type Profile struct {
-	ID              int64
-	Login           string
-	Email           string
-	PublicEmail     string `json:"public_email"`
-	Name            string
-	Www             string
-	Jabber          string
-	Gg              int
-	City            string
-	About           string
-	AuthorGroup     int `json:"author_group"`
-	LinksAdded      int `json:"links_added"`
-	LinksPublished  int `json:"links_published"`
-	Comments        int
-	Rank            int
-	Followers       int
-	Following       int
-	Entries         int
-	EntriesComments int `json:"entries_comments"`
-	Diggs           int
-	Buries          int
-	RelatedLinks    int `json:"related_links"`
-	Groups          int
-	Sex             string
-	Avatar          string
-	AvatarLo        string `json:"avatar_lo"`
-	AvatarMed       string `json:"avatar_med"`
-	AvatarBig       string `json:"avatar_big"`
-	IsObserved      bool   `json:"is_observed"`
-}
-
 type LinkComment struct {
 	ID              int    `json:"id"`
 	Date            string `json:"date"`

@@ -24,7 +24,7 @@ func TestWykopHandler_SendPrivateMessageTo(t *testing.T) {
 	wh.LoginToWypok()
 
 	content := "Testy integracyjne wrappera WykopAPI w GoLangu. Test wiadomości bez dodatkowych elementów."
-	to := "m__b"
+	to := "powodzenia"
 	succeeded, err := wh.SendPrivateMessageTo(to, content)
 	assert.True(t, succeeded)
 	assert.Nil(t, err)
@@ -44,7 +44,7 @@ func TestWykopHandler_SendPrivateMessageWithEmbeddedUrlTo(t *testing.T) {
 
 	content := "Testy integracyjne wrappera WykopAPI w GoLangu. Test wiadomości z podlinkowanym obrazkiem."
 	embed := "http://www.unixstickers.com/image/data/stickers/golang/golang.sh.png"
-	to := "m__b"
+	to := "powodzenia"
 	succeeded, err := wh.SendPrivateMessageWithEmbeddedUrlTo(to, content, embed)
 	assert.True(t, succeeded)
 	assert.Nil(t, err)
@@ -61,7 +61,7 @@ func TestWykopHandler_GetConversation(t *testing.T) {
 	defer teardownTestCase(t)
 
 	wh.LoginToWypok()
-	conversationTitle := "m__b"
+	conversationTitle := "powodzenia"
 
 	conversation, err := wh.GetConversation(conversationTitle)
 
@@ -75,7 +75,7 @@ func TestWykopHandler_DeleteConversation(t *testing.T) {
 
 	wh.LoginToWypok()
 
-	conversationTitle := "m__b"
+	conversationTitle := "powodzenia"
 
 	succeeded, err := wh.DeleteConversation(conversationTitle)
 

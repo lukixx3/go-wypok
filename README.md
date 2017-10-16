@@ -13,7 +13,7 @@ go get gitlab.com/agilob/go-wypok
 W nawiasie podana jest metoda obsługująca dane endpoint.
 Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej nazwie (`PostEntry` i `PostEntryWithEmbeddedContent`)
 
-1. Comments
+1. Comments // In progress
  - [ ] Add
  - [ ] Plus
  - [ ] Minus
@@ -127,9 +127,9 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [ ] Block
  - [ ] Unblock
 18. PM
- - [x] ConversationsList
- - [x] Conversation
- - [x] SendMessage
- - [x] DeleteConversation
+ - [x] ConversationsList (GetConversationsList)
+ - [x] Conversation (GetConversation)
+ - [x] SendMessage (SendPrivateMessageTo, SendPrivateMessageWithEmbeddedUrlTo)
+ - [x] DeleteConversation (DeleteConversation)
 19. Tags
  - [ ] Index

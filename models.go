@@ -174,9 +174,3 @@ type WykopErrorMessage struct {
 	Code    int
 	Message string
 }
-
-type FavoritesList struct {
-	ID     int    `json:"id"`
-	Name   string `json:"name`
-	Public bool   `json:"is_public`
-}

@@ -4,12 +4,16 @@
 # go-wypok
 Obsługa API wykopu w go
 
+```
+go get gitlab.com/agilob/go-wypok
+```
+
 # Wspierane metody API w kolejnosi identycznej jak na stronie [dokumentacji](https://www.wykop.pl/dla-programistow/dokumentacja/)
 
 W nawiasie podana jest metoda obsługująca dane endpoint.
 Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej nazwie (`PostEntry` i `PostEntryWithEmbeddedContent`)
 
-1. Comments
+1. Comments // In progress
  - [ ] Add
  - [ ] Plus
  - [ ] Minus
@@ -98,6 +102,7 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [x] Vote (UpvoteEntry)
  - [x] Unvote (UnvoteEntry)
  - [x] Favorite (FavoriteEntry)
+ - [ ] Polls (available only in APiv2)
 13. Rank
  - [x] Index
 14. Observatory
@@ -121,10 +126,10 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [ ] Unobserve
  - [ ] Block
  - [ ] Unblock
-18. PM // In progress
- - [ ] ConversationsList
- - [ ] Conversation
- - [ ] SendMessage
- - [ ] DeleteConversation
+18. PM
+ - [x] ConversationsList (GetConversationsList)
+ - [x] Conversation (GetConversation)
+ - [x] SendMessage (SendPrivateMessageTo, SendPrivateMessageWithEmbeddedUrlTo)
+ - [x] DeleteConversation (DeleteConversation)
 19. Tags
  - [ ] Index

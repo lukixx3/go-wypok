@@ -1,7 +1,6 @@
 package go_wypok
 
 import (
-	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -15,7 +14,7 @@ func TestWykopHandlerGetFavoritesLists(t *testing.T) {
 
 	lists, wypokError := wh.GetFavoritesLists()
 	assert.Nil(t, wypokError, "Expected that error will be nil")
-	assert.NotEmpty(t, lists, "Expected that farovites list won't be empty")
+	assert.NotEmpty(t, lists, "Expected that favorites list won't be empty")
 }
 
 func TestWykopHandlerGetFavoritesListLinks(t *testing.T) {
@@ -25,13 +24,11 @@ func TestWykopHandlerGetFavoritesListLinks(t *testing.T) {
 	wh.LoginToWypok()
 
 	lists, _ := wh.GetFavoritesLists()
-	if len(lists) > 0 {
-		links, wypokError := wh.GetFavoritesListLinks(strconv.Itoa(lists[0].ID))
-		assert.Nil(t, wypokError, "Expected that error will be nil")
-		assert.NotEmptyf(t, links, "Expected that links from favorites list '%s' won't be empty", lists[0].Name)
-	} else {
-		t.Error("GetFavoritesLists probably failed, lists are empty, checking not existing list")
-	}
+	assert.NotEmpty(t, lists, "Expected that favorites list won't be empty")
+
+	links, wypokError := wh.GetFavoritesListLinks(lists[0].Id)
+	assert.Nil(t, wypokError, "Expected that error will be nil")
+	assert.NotEmptyf(t, links, "Expected that links from favorites list '%s' won't be empty", lists[0].Name)
 }
 
 func TestWykopHandlerGetFavoritesComments(t *testing.T) {
@@ -42,7 +39,7 @@ func TestWykopHandlerGetFavoritesComments(t *testing.T) {
 
 	comments, wypokError := wh.GetFavoritesComments()
 	assert.Nil(t, wypokError, "Expected that error will be nil")
-	assert.NotEmpty(t, comments, "Expected that farovites list won't be empty")
+	assert.NotEmpty(t, comments, "Expected that favorites list won't be empty")
 }
 
 func TestWykopHandlerGetFavoritesEntries(t *testing.T) {
@@ -53,5 +50,28 @@ func TestWykopHandlerGetFavoritesEntries(t *testing.T) {
 
 	lists, wypokError := wh.GetFavoritesEntries()
 	assert.Nil(t, wypokError, "Expected that error will be nil")
-	assert.NotEmpty(t, lists, "Expected that farovites list won't be empty")
+	assert.NotEmpty(t, lists, "Expected that favorites list won't be empty")
+}
+
+func TestBuildingFavoritesURLs(t *testing.T) {
+	appKey := "APPKEY"
+	favoritesId := 999
+	userKey := "USERKEY"
+
+	assert.Equal(t,
+		"https://a.wykop.pl/favorites/index/999/appkey/APPKEY/userkey/USERKEY",
+		getFavoritesListLinksURL(favoritesId, appKey, userKey),
+	)
+	assert.Equal(t,
+		"https://a.wykop.pl/favorites/lists/appkey/APPKEY/userkey/USERKEY",
+		getFavoritesListsURL(appKey, userKey),
+	)
+	assert.Equal(t,
+		"https://a.wykop.pl/favorites/comments/appkey/APPKEY/userkey/USERKEY",
+		getFavoritesCommentsURL(appKey, userKey),
+	)
+	assert.Equal(t,
+		"https://a.wykop.pl/favorites/entries/appkey/APPKEY/userkey/USERKEY",
+		getFavoritesEntriesURL(appKey, userKey),
+	)
 }

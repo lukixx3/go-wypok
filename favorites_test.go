@@ -55,7 +55,7 @@ func TestWykopHandlerGetFavoritesEntries(t *testing.T) {
 
 func TestBuildingFavoritesURLs(t *testing.T) {
 	appKey := "APPKEY"
-	favoritesId := 999
+	favoritesId := uint(999)
 	userKey := "USERKEY"
 
 	assert.Equal(t,

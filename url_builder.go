@@ -1,12 +1,14 @@
 package go_wypok
 
-const (
-	LOGIN_URL = "https://a.wykop.pl/user/login"
+import "fmt"
 
-	PROFILE_INDEX          = "https://a.wykop.pl/profile/index/"
-	PROFILE_ENTRIES        = "https://a.wykop.pl/profile/entries/"
-	PROFILE_COMMENTS       = "https://a.wykop.pl/profile/comments/"
-	PROFILE_ENTRY_COMMENTS = "https://a.wykop.pl/profile/entriesComments/"
+const (
+	LOGIN_URL = "https://a.wykop.pl/user/login/appkey/%s"
+
+	PROFILE_INDEX          = "https://a.wykop.pl/profile/index/%s/appkey/%s"
+	PROFILE_ENTRIES        = "https://a.wykop.pl/profile/entries/%s/appkey/%s/userkey/%s/page/%d"
+	PROFILE_COMMENTS       = "https://a.wykop.pl/profile/comments/%s/appkey/%s/userkey/%s/page/%d"
+	PROFILE_ENTRY_COMMENTS = "https://a.wykop.pl/profile/entriesComments/%s/appkey/%s/userkey/%s/page/%d"
 
 	ENTRY_INDEX          = "https://a.wykop.pl/entries/index/%d/appkey/%s"
 	ENTRY_ADD            = "https://a.wykop.pl/entries/add/appkey/%s/userkey/%s"
@@ -26,33 +28,33 @@ const (
 	MAIN_PAGE     = "https://a.wykop.pl/links/promoted/"
 	UPCOMING_PAGE = "https://a.wykop.pl/links/upcoming/"
 
-	ENTRIES_FROM_TAG = "https://a.wykop.pl/tag/entries/"
+	ENTRIES_FROM_TAG   = "https://a.wykop.pl/tag/entries/%s/appkey/%s/page/%d"
 	FAVORITES_INDEX    = "https://a.wykop.pl/favorites/index/%d/appkey/%s/userkey/%s"
 	FAVORITES_LISTS    = "https://a.wykop.pl/favorites/lists/appkey/%s/userkey/%s"
 	FAVORITES_COMMENTS = "https://a.wykop.pl/favorites/comments/appkey/%s/userkey/%s"
 	FAVORITES_ENTRIES  = "https://a.wykop.pl/favorites/entries/appkey/%s/userkey/%s"
 )
 
-func getLoginUrl(appkey string) string {
-	return LOGIN_URL + "/appkey/" + appkey
+func getLoginUrl(wh *WykopHandler) string {
+	return fmt.Sprintf(LOGIN_URL, wh.appKey)
 }
 
-func getProfileUrl(username string) string {
-	return PROFILE_INDEX + username
+func getProfileUrl(username string, wh *WykopHandler) string {
+	return fmt.Sprintf(PROFILE_INDEX, username, wh.appKey)
 }
 
-func getProfileEntriesUrl(username string) string {
-	return PROFILE_ENTRIES + username
+func getProfileEntriesUrl(username string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(PROFILE_ENTRIES, username, wh.appKey, wh.authResponse.Userkey, page)
 }
 
-func getProfileCommentsUrl(username string) string {
-	return PROFILE_COMMENTS + username
+func getProfileCommentsUrl(username string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(PROFILE_COMMENTS, username, wh.appKey, wh.authResponse.Userkey, page)
 }
 
-func getProfileEntriesCommentsUrl(username string) string {
-	return PROFILE_ENTRY_COMMENTS + username
+func getProfileEntriesCommentsUrl(username string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(PROFILE_ENTRY_COMMENTS, username, wh.appKey, wh.authResponse.Userkey, page)
 }
 
-func getTagEntries(tag string) string {
-	return ENTRIES_FROM_TAG + tag
+func getTagEntries(tag string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(ENTRIES_FROM_TAG, tag, wh.appKey, page)
 }

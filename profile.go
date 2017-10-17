@@ -37,7 +37,7 @@ type Profile struct {
 }
 
 func (wh *WykopHandler) GetProfile(username string) (profile Profile, wypokError *WykopError) {
-	urlAddress := getProfileUrl(username, wh.appKey)
+	urlAddress := getProfileUrl(username, wh)
 
 	responseBody := wh.sendGetRequest(urlAddress)
 	wypokError = wh.getObjectFromJson(responseBody, &profile)
@@ -46,7 +46,7 @@ func (wh *WykopHandler) GetProfile(username string) (profile Profile, wypokError
 }
 
 func (wh *WykopHandler) GetProfileAdded(username string, page uint) (profile []Link, wypokError *WykopError) {
-	urlAddress := getProfileAddedUrl(username, wh.appKey, page)
+	urlAddress := getProfileAddedUrl(username, wh, page)
 
 	responseBody := wh.sendGetRequest(urlAddress)
 	wypokError = wh.getObjectFromJson(responseBody, &profile)
@@ -55,7 +55,7 @@ func (wh *WykopHandler) GetProfileAdded(username string, page uint) (profile []L
 }
 
 func (wh *WykopHandler) GetProfilePublished(username string, page uint) (profile []Link, wypokError *WykopError) {
-	urlAddress := getProfilePublishedUrl(username, wh.appKey, page)
+	urlAddress := getProfilePublishedUrl(username, wh, page)
 
 	responseBody := wh.sendGetRequest(urlAddress)
 	wypokError = wh.getObjectFromJson(responseBody, &profile)
@@ -64,7 +64,7 @@ func (wh *WykopHandler) GetProfilePublished(username string, page uint) (profile
 }
 
 func (wh *WykopHandler) GetProfileCommented(username string, page uint) (profile []Link, wypokError *WykopError) {
-	urlAddress := getProfileCommentedUrl(username, wh.appKey, page)
+	urlAddress := getProfileCommentedUrl(username, wh, page)
 
 	responseBody := wh.sendGetRequest(urlAddress)
 	wypokError = wh.getObjectFromJson(responseBody, &profile)
@@ -73,7 +73,7 @@ func (wh *WykopHandler) GetProfileCommented(username string, page uint) (profile
 }
 
 func (wh *WykopHandler) GetProfileComments(username string, page uint) (entries []LinkComment, wypokError *WykopError) {
-	urlAddress := getProfileCommentsUrl(username, wh.appKey, wh.authResponse.Userkey, page)
+	urlAddress := getProfileCommentsUrl(username, wh, page)
 
 	responseBody := wh.sendGetRequest(urlAddress)
 	wypokError = wh.getObjectFromJson(responseBody, &entries)
@@ -82,7 +82,7 @@ func (wh *WykopHandler) GetProfileComments(username string, page uint) (entries 
 }
 
 func (wh *WykopHandler) GetProfileDigged(username string, page uint) (entries []Link, wypokError *WykopError) {
-	urlAddress := getProfileDiggedUrl(username, wh.appKey, page)
+	urlAddress := getProfileDiggedUrl(username, wh, page)
 
 	responseBody := wh.sendGetRequest(urlAddress)
 	wypokError = wh.getObjectFromJson(responseBody, &entries)
@@ -91,7 +91,7 @@ func (wh *WykopHandler) GetProfileDigged(username string, page uint) (entries []
 }
 
 func (wh *WykopHandler) GetProfileBuried(username string, page uint) (entries []Link, wypokError *WykopError) {
-	urlAddress := getProfileBuriedUrl(username, wh.appKey, wh.authResponse.Userkey, page)
+	urlAddress := getProfileBuriedUrl(username, wh, page)
 	responseBody := wh.sendGetRequest(urlAddress)
 	wypokError = wh.getObjectFromJson(responseBody, &entries)
 
@@ -99,7 +99,7 @@ func (wh *WykopHandler) GetProfileBuried(username string, page uint) (entries []
 }
 
 func (wh *WykopHandler) GetProfileFavorites(username string) (links []Link, wypokError *WykopError) {
-	urlAddress := getProfileFavoritesUrl(username, wh.appKey, wh.authResponse.Userkey)
+	urlAddress := getProfileFavoritesUrl(username, wh)
 
 	responseBody := wh.sendGetRequest(urlAddress)
 	wypokError = wh.getObjectFromJson(responseBody, &links)
@@ -108,7 +108,7 @@ func (wh *WykopHandler) GetProfileFavorites(username string) (links []Link, wypo
 }
 
 func (wh *WykopHandler) GetProfileEntries(username string, page uint) (entries []Entry, wypokError *WykopError) {
-	urlAddress := getProfileEntriesUrl(username, wh.appKey, wh.authResponse.Userkey, page)
+	urlAddress := getProfileEntriesUrl(username, wh, page)
 
 	responseBody := wh.sendGetRequest(urlAddress)
 	wypokError = wh.getObjectFromJson(responseBody, &entries)
@@ -117,7 +117,7 @@ func (wh *WykopHandler) GetProfileEntries(username string, page uint) (entries [
 }
 
 func (wh *WykopHandler) GetProfileEntriesComments(username string, page uint) (entryComments []EntryComment, wypokError *WykopError) {
-	urlAddress := getProfileEntriesCommentsUrl(username, wh.appKey, wh.authResponse.Userkey, page)
+	urlAddress := getProfileEntriesCommentsUrl(username, wh, page)
 
 	responseBody := wh.sendGetRequest(urlAddress)
 	wypokError = wh.getObjectFromJson(responseBody, &entryComments)
@@ -125,42 +125,42 @@ func (wh *WykopHandler) GetProfileEntriesComments(username string, page uint) (e
 	return
 }
 
-func getProfileUrl(username, appkey string) string {
-	return fmt.Sprintf(PROFILE_INDEX, username, appkey)
+func getProfileUrl(username string, wh *WykopHandler) string {
+	return fmt.Sprintf(PROFILE_INDEX, username, wh.appKey)
 }
 
-func getProfileAddedUrl(username, appkey string, page uint) string {
-	return fmt.Sprintf(PROFILE_ADDED, username, appkey, page)
+func getProfileAddedUrl(username string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(PROFILE_ADDED, username, wh.appKey, page)
 }
 
-func getProfilePublishedUrl(username, appkey string, page uint) string {
-	return fmt.Sprintf(PROFILE_PUBLISHED, username, appkey, page)
+func getProfilePublishedUrl(username string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(PROFILE_PUBLISHED, username, wh.appKey, page)
 }
 
-func getProfileCommentedUrl(username, appkey string, page uint) string {
-	return fmt.Sprintf(PROFILE_COMMENTED, username, appkey, page)
+func getProfileCommentedUrl(username string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(PROFILE_COMMENTED, username, wh.appKey, page)
 }
 
-func getProfileCommentsUrl(username, appkey, userkey string, page uint) string {
-	return fmt.Sprintf(PROFILE_COMMENTS, username, appkey, userkey, page)
+func getProfileCommentsUrl(username string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(PROFILE_COMMENTS, username, wh.appKey, wh.authResponse.Userkey, page)
 }
 
-func getProfileDiggedUrl(username, appkey string, page uint) string {
-	return fmt.Sprintf(PROFILE_DIGGED, username, appkey, page)
+func getProfileDiggedUrl(username string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(PROFILE_DIGGED, username, wh.appKey, page)
 }
 
-func getProfileBuriedUrl(username, appkey, userkey string, page uint) string {
-	return fmt.Sprintf(PROFILE_BURIED, username, appkey, userkey, page)
+func getProfileBuriedUrl(username string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(PROFILE_BURIED, username, wh.appKey, wh.authResponse.Userkey, page)
 }
 
-func getProfileFavoritesUrl(username, appkey, userkey string) string {
-	return fmt.Sprintf(PROFILE_FAVORITES, username, appkey, userkey)
+func getProfileFavoritesUrl(username string, wh *WykopHandler) string {
+	return fmt.Sprintf(PROFILE_FAVORITES, username, wh.appKey, wh.authResponse.Userkey)
 }
 
-func getProfileEntriesUrl(username, appkey, userkey string, page uint) string {
-	return fmt.Sprintf(PROFILE_ENTRIES, username, appkey, userkey, page)
+func getProfileEntriesUrl(username string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(PROFILE_ENTRIES, username, wh.appKey, wh.authResponse.Userkey, page)
 }
 
-func getProfileEntriesCommentsUrl(username, appkey, userkey string, page uint) string {
-	return fmt.Sprintf(PROFILE_ENTRY_COMMENTS, username, appkey, userkey, page)
+func getProfileEntriesCommentsUrl(username string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(PROFILE_ENTRY_COMMENTS, username, wh.appKey, wh.authResponse.Userkey, page)
 }

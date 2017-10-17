@@ -35,20 +35,20 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [ ] Upcoming
 5. Profile
  - [x] Index (GetProfile)
- - [ ] Added
+ - [x] Added (GetProfileAdded)
  - [ ] Groups
- - [ ] Published
- - [ ] Commented
+ - [x] Published (GetProfilePublished)
+ - [x] Commented (GetProfileCommented)
  - [x] Comments (GetProfileComments)
- - [ ] Digged
- - [ ] Buried
+ - [x] Digged (GetProfileDigged)
+ - [x] Buried (GetProfileBuried)
  - [ ] Observe
  - [ ] Unobserve
  - [ ] Block
  - [ ] Unblock
  - [ ] Followers
  - [ ] Followed
- - [ ] Favorites
+ - [x] Favorites (GetProfileFavorites)
  - [x] Entries (GetProfileEntries)
  - [x] EntriesComments (GetProfileEntriesComments)
  - [ ] Related

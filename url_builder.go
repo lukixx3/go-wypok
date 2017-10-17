@@ -6,9 +6,14 @@ const (
 	LOGIN_URL = "https://a.wykop.pl/user/login/appkey/%s"
 
 	PROFILE_INDEX          = "https://a.wykop.pl/profile/index/%s/appkey/%s"
+	PROFILE_ADDED          = "https://a.wykop.pl/profile/added/%s/appkey/%s/page/%d"
+	PROFILE_PUBLISHED      = "https://a.wykop.pl/profile/published/%s/appkey/%s/page/%d"
+	PROFILE_COMMENTED      = "https://a.wykop.pl/profile/commented/%s/appkey/%s/page/%d"
+	PROFILE_COMMENTS       = "https://a.wykop.pl/profile/comments/%s/appkey/%s/userkey/%s/page/%d"
+	PROFILE_DIGGED         = "https://a.wykop.pl/profile/digged/%s/appkey/%s/page/%d"
+	PROFILE_BURIED         = "https://a.wykop.pl/profile/buried/%s/appkey/%s/userkey/%s/page/%d"
 	PROFILE_FAVORITES      = "https://a.wykop.pl/profile/favorites/%s/appkey/%s/userkey/%s"
 	PROFILE_ENTRIES        = "https://a.wykop.pl/profile/entries/%s/appkey/%s/userkey/%s/page/%d"
-	PROFILE_COMMENTS       = "https://a.wykop.pl/profile/comments/%s/appkey/%s/userkey/%s/page/%d"
 	PROFILE_ENTRY_COMMENTS = "https://a.wykop.pl/profile/entriesComments/%s/appkey/%s/userkey/%s/page/%d"
 
 	ENTRY_INDEX          = "https://a.wykop.pl/entries/index/%d/appkey/%s"
@@ -29,7 +34,7 @@ const (
 	MAIN_PAGE     = "https://a.wykop.pl/links/promoted/"
 	UPCOMING_PAGE = "https://a.wykop.pl/links/upcoming/"
 
-	ENTRIES_FROM_TAG = "https://a.wykop.pl/tag/entries/"
+	ENTRIES_FROM_TAG = "https://a.wykop.pl/tag/entries/%s/appkey/%s/page/%d"
 
 	FAVORITES_INDEX    = "https://a.wykop.pl/favorites/index/%s/appkey/%s/userkey/%s"
 	FAVORITES_LISTS    = "https://a.wykop.pl/favorites/lists/appkey/%s/userkey/%s"
@@ -41,6 +46,6 @@ func getLoginUrl(appkey string) string {
 	return fmt.Sprintf(LOGIN_URL, appkey)
 }
 
-func getTagEntries(tag string) string {
-	return ENTRIES_FROM_TAG + tag
+func getTagEntries(tag, appkey string, page uint) string {
+	return fmt.Sprintf(ENTRIES_FROM_TAG, tag, appkey, page)
 }

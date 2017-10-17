@@ -4,10 +4,8 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"github.com/parnurzeal/gorequest"
 	"net/url"
-	"strconv"
 )
 
 const (
@@ -26,6 +24,13 @@ type WykopHandler struct {
 	secret        string
 }
 
+type AuthenticationResponse struct {
+	Login        string
+	Email        string
+	ViolationUrl string `json:"violation_url"`
+	Userkey      string
+}
+
 func (wh *WykopHandler) LoginToWypok() *WykopError {
 
 	responseBody := wh.sendPostRequestForBody(getLoginUrl(wh.appKey))
@@ -35,70 +40,12 @@ func (wh *WykopHandler) LoginToWypok() *WykopError {
 	return wh.getObjectFromJson(responseBody, &wh.authResponse)
 }
 
-func (wh *WykopHandler) GetEntriesFromTag(tag string, page int) (tagEntries TagsEntries, wypokError *WykopError) {
-	urlAddress := getTagEntries(tag) + appKeyPathElement + wh.appKey + "/page/" + strconv.Itoa(page)
+func (wh *WykopHandler) GetEntriesFromTag(tag string, page uint) (tagEntries TagsEntries, wypokError *WykopError) {
+	urlAddress := getTagEntries(tag, wh.appKey, page)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
 
 	wypokError = wh.getObjectFromJson(responseBody, &tagEntries)
-
-	return
-}
-
-func (wh *WykopHandler) GetProfileEntries(username string, page int) (entries []Entry, wypokError *WykopError) {
-	urlAddress := getProfileEntriesUrl(username, wh.appKey, wh.authResponse.Userkey, page)
-
-	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
-
-	wypokError = wh.getObjectFromJson(responseBody, &entries)
-
-	return
-}
-
-func (wh *WykopHandler) GetProfileComments(username string, page int) (entries []LinkComment, wypokError *WykopError) {
-	urlAddress := getProfileCommentsUrl(username, wh.appKey, wh.authResponse.Userkey, page)
-
-	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
-
-	wypokError = wh.getObjectFromJson(responseBody, &entries)
-
-	return
-}
-
-func (wh *WykopHandler) GetProfileEntriesComments(username string, page int) (entryComments []EntryComment, wypokError *WykopError) {
-	urlAddress := getProfileEntriesCommentsUrl(username, wh.appKey, wh.authResponse.Userkey, page)
-
-	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
-
-	wypokError = wh.getObjectFromJson(responseBody, &entryComments)
-
-	return
-}
-
-func (wh *WykopHandler) GetProfile(username string) (profile Profile, wypokError *WykopError) {
-	urlAddress := getProfileUrl(username, wh.appKey)
-
-	_, responseBody, _ := gorequest.New().Get(urlAddress).
-		Set(contentType, mediaTypeFormType).
-		Set(apiSignHeader, wh.hashRequest(urlAddress)).
-		End()
-
-	wypokError = wh.getObjectFromJson(responseBody, &profile)
-
-	return
-}
-
-func (wh *WykopHandler) GetProfileFavorites(username string) (profile Profile, wypokError *WykopError) {
-	urlAddress := getProfileFavoritesUrl(username, wh.appKey, wh.authResponse.Userkey)
-
-	_, responseBody, _ := gorequest.New().Get(urlAddress).
-		Set(contentType, mediaTypeFormType).
-		Set(apiSignHeader, wh.hashRequest(urlAddress)).
-		End()
-
-	fmt.Println(responseBody)
-
-	wypokError = wh.getObjectFromJson(responseBody, &profile)
 
 	return
 }
@@ -126,6 +73,18 @@ func (wh *WykopHandler) preparePostRequest(address string) *gorequest.SuperAgent
 		Send(body)
 }
 
+func (wh *WykopHandler) sendGetRequest(address string) string {
+	body := url.Values{}
+	body.Add(accountKeyHeader, wh.connectionKey)
+
+	_, bodyResp, _ := gorequest.New().Post(address).
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(address+wh.connectionKey)).
+		Send(body).
+		End()
+	return bodyResp
+}
+
 func (wh *WykopHandler) sendGetRequestForBody(address string) string {
 	body := url.Values{}
 	body.Add(accountKeyHeader, wh.connectionKey)
@@ -135,7 +94,6 @@ func (wh *WykopHandler) sendGetRequestForBody(address string) string {
 		Set(apiSignHeader, wh.hashRequest(address+wh.connectionKey)).
 		Send(body).
 		End()
-
 	return bodyResp
 }
 

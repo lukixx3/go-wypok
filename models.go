@@ -121,13 +121,6 @@ type FavoriteResponse struct {
 	UserFavorite bool `json:"user_favorite"`
 }
 
-type AuthenticationResponse struct {
-	Login        string
-	Email        string
-	ViolationUrl string `json:"violation_url"`
-	Userkey      string
-}
-
 type EntryResponse struct {
 	Id int
 }

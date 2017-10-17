@@ -1,7 +1,7 @@
 package go_wypok
 
 type Link struct {
-	Id              int
+	Id              uint
 	Title           string
 	Description     string
 	Tags            string
@@ -31,7 +31,7 @@ type Link struct {
 	UserFavorite    bool              `json:"user_favorite,omitempty"`
 }
 
-func (wh *WykopHandler) GetMainPageLinks(page int) (mainPageLinks []Link, wypokError *WykopError) {
+func (wh *WykopHandler) GetMainPageLinks(page uint) (mainPageLinks []Link, wypokError *WykopError) {
 	urlAddress := getMainPageUrl() + appKeyPathElement + wh.appKey
 
 	if wh.authResponse.Userkey != "" {
@@ -45,7 +45,7 @@ func (wh *WykopHandler) GetMainPageLinks(page int) (mainPageLinks []Link, wypokE
 	return
 }
 
-func (wh *WykopHandler) GetUpcomingLinks(page int) (mainPageLinks []Link, wypokError *WykopError) {
+func (wh *WykopHandler) GetUpcomingLinks(page uint) (mainPageLinks []Link, wypokError *WykopError) {
 	urlAddress := getUpcomingPageUrl() + appKeyPathElement + wh.appKey
 
 	if wh.authResponse.Userkey != "" {

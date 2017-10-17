@@ -24,8 +24,8 @@ func TestBuildingUrls(t *testing.T) {
 	expectedEntryFavoriteUrl := "https://a.wykop.pl/entries/favorite/999/appkey/APPKEY/userkey/USERKEY"
 
 	appKey := "APPKEY"
-	entryId := 999
-	commentId := 666
+	entryId := uint(999)
+	commentId := uint(666)
 	userKey := "USERKEY"
 
 	assert.Equal(t, expectedGetEntryUrl, getEntryUrl(entryId, appKey))
@@ -52,8 +52,20 @@ func TestWykopHandlerGetEntry(t *testing.T) {
 	assert.Equal(t, 2, wypokError.ErrorObject.Code)
 	assert.Equal(t, "Niepoprawne parametry", wypokError.ErrorObject.Message)
 
-	assert.Equal(t, 0, entry.Id)
+	assert.Equal(t, uint(0), entry.Id)
 	assert.Empty(t, entry.Author)
+}
+
+func TestWykopHandlerGetCorrectEntry(t *testing.T) {
+	teardownTestCase := setupTestCase(t)
+	defer teardownTestCase(t)
+	wh.LoginToWypok()
+
+	entry, wypokError := wh.GetEntry(23391703)
+	assert.Nil(t, wypokError)
+
+	assert.Equal(t, uint(23391703), entry.Id)
+	assert.NotEmpty(t, entry.Author)
 }
 
 func TestWykopHandlerPostEntry(t *testing.T) {

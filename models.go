@@ -6,7 +6,7 @@ import (
 )
 
 type Profile struct {
-	ID              int64
+	Id              uint
 	Login           string
 	Email           string
 	PublicEmail     string `json:"public_email"`
@@ -38,7 +38,7 @@ type Profile struct {
 }
 
 type LinkComment struct {
-	ID              int    `json:"id"`
+	Id              uint   `json:"id"`
 	Date            string `json:"date"`
 	Author          string `json:"author"`
 	AuthorGroup     int    `json:"author_group"`
@@ -161,11 +161,11 @@ type AuthenticationResponse struct {
 }
 
 type EntryResponse struct {
-	Id int
+	Id uint
 }
 
 type CommentResponse struct {
-	Id int
+	Id uint
 }
 
 // WTF wykop.pl API is so retarded. Everywhere it returns int as Id on any response class
@@ -189,18 +189,18 @@ func newEntryResponse(stringIdResponse stringEntryResponse) EntryResponse {
 	if err != nil {
 		entryResponse.Id = 0
 	} else {
-		entryResponse.Id = theId
+		entryResponse.Id = uint(theId)
 	}
 	return entryResponse
 }
 
 func newCommentResponse(stringIdResponse stringCommentResponse) CommentResponse {
 	commentResponse := CommentResponse{}
-	theId, err := strconv.Atoi(stringIdResponse.Id)
+	theId, err := strconv.ParseUint(stringIdResponse.Id, 10, 32)
 	if err != nil {
 		commentResponse.Id = 0
 	} else {
-		commentResponse.Id = theId
+		commentResponse.Id = uint(theId)
 	}
 	return commentResponse
 }

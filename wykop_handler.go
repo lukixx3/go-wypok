@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"github.com/parnurzeal/gorequest"
 	"net/url"
-	"strconv"
 )
 
 const (
@@ -27,15 +26,15 @@ type WykopHandler struct {
 
 func (wh *WykopHandler) LoginToWypok() *WykopError {
 
-	responseBody := wh.sendPostRequestForBody(getLoginUrl(wh.appKey))
+	responseBody := wh.sendPostRequestForBody(getLoginUrl(wh))
 
 	wh.authResponse = AuthenticationResponse{}
 
 	return wh.getObjectFromJson(responseBody, &wh.authResponse)
 }
 
-func (wh *WykopHandler) GetEntriesFromTag(tag string, page int) (tagEntries TagsEntries, wypokError *WykopError) {
-	urlAddress := getTagEntries(tag) + appKeyPathElement + wh.appKey + "/page/" + strconv.Itoa(page)
+func (wh *WykopHandler) GetEntriesFromTag(tag string, page uint) (tagEntries TagsEntries, wypokError *WykopError) {
+	urlAddress := getTagEntries(tag, wh, page)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
 
@@ -44,8 +43,8 @@ func (wh *WykopHandler) GetEntriesFromTag(tag string, page int) (tagEntries Tags
 	return
 }
 
-func (wh *WykopHandler) GetProfileEntries(username string, page int) (entries []Entry, wypokError *WykopError) {
-	urlAddress := getProfileEntriesUrl(username) + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey + "/page/" + strconv.Itoa(page)
+func (wh *WykopHandler) GetProfileEntries(username string, page uint) (entries []Entry, wypokError *WykopError) {
+	urlAddress := getProfileEntriesUrl(username, wh, page)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
 
@@ -54,8 +53,8 @@ func (wh *WykopHandler) GetProfileEntries(username string, page int) (entries []
 	return
 }
 
-func (wh *WykopHandler) GetProfileComments(username string, page int) (entries []LinkComment, wypokError *WykopError) {
-	urlAddress := getProfileCommentsUrl(username) + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey + "/page/" + strconv.Itoa(page)
+func (wh *WykopHandler) GetProfileComments(username string, page uint) (entries []LinkComment, wypokError *WykopError) {
+	urlAddress := getProfileCommentsUrl(username, wh, page)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
 
@@ -64,8 +63,8 @@ func (wh *WykopHandler) GetProfileComments(username string, page int) (entries [
 	return
 }
 
-func (wh *WykopHandler) GetProfileEntriesComments(username string, page int) (entryComments []EntryComment, wypokError *WykopError) {
-	urlAddress := getProfileEntriesCommentsUrl(username) + appKeyPathElement + wh.appKey + userKeyPathElement + wh.authResponse.Userkey + "/page/" + strconv.Itoa(page)
+func (wh *WykopHandler) GetProfileEntriesComments(username string, page uint) (entryComments []EntryComment, wypokError *WykopError) {
+	urlAddress := getProfileEntriesCommentsUrl(username, wh, page)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
 
@@ -75,7 +74,7 @@ func (wh *WykopHandler) GetProfileEntriesComments(username string, page int) (en
 }
 
 func (wh *WykopHandler) GetProfile(username string) (profile Profile, wypokError *WykopError) {
-	urlAddress := getProfileUrl(username) + appKeyPathElement + wh.appKey
+	urlAddress := getProfileUrl(username, wh)
 
 	_, responseBody, _ := gorequest.New().Get(urlAddress).
 		Set(contentType, mediaTypeFormType).

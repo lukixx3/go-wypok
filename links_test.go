@@ -14,7 +14,7 @@ func TestGettingMainPageWithFakeUserKey(t *testing.T) {
 	links, wypokError := wh.GetMainPageLinks(1)
 
 	assert.NotNil(t, wypokError)
-	assert.Equal(t, uint(0), len(links))
+	assert.Equal(t, 0, len(links))
 
 	assert.Equal(t, "Niepoprawny klucz użytkownika", wypokError.ErrorObject.Message, "Expected login to fail and get error message")
 	assert.Equal(t, 11, wypokError.ErrorObject.Code, "Expected login to fail and get error message")

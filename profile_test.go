@@ -137,11 +137,11 @@ func TestBlockingAndUnblockingProfile(t *testing.T) {
 	assert.NotNil(t, blockingError, "Expected error, cannot block yourself")
 	assert.False(t, blocked)
 
-	blocked2, blockingError2 := wh.BlockProfile("Wyrewolwerowanyrewolwer")
+	blocked2, blockingError2 := wh.BlockProfile("UncleBilly")
 	assert.Nil(t, blockingError2)
 	assert.True(t, blocked2)
 
-	unblocked, unblockingError := wh.UnblockProfile("Wyrewolwerowanyrewolwer")
+	unblocked, unblockingError := wh.UnblockProfile("UncleBilly")
 	assert.Nil(t, unblockingError)
 	assert.True(t, unblocked)
 }

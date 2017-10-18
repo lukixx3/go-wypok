@@ -35,7 +35,7 @@ func TestGetProfileFavorites(t *testing.T) {
 	defer teardownTestCase(t)
 	wh.LoginToWypok()
 
-	favLinks, linkError := wh.GetProfileFavorites("interface")
+	favLinks, linkError := wh.GetProfileFavorites(wh.authResponse.Login)
 	assert.Nil(t, linkError)
 	assert.NotEmpty(t, favLinks)
 	for _, link := range favLinks {
@@ -91,7 +91,7 @@ func TestGetProfileBuried(t *testing.T) {
 	defer teardownTestCase(t)
 	wh.LoginToWypok()
 
-	buriedLinks, linkError := wh.GetProfileBuried("interface", 1)
+	buriedLinks, linkError := wh.GetProfileBuried(wh.authResponse.Login, 1)
 	assert.Nil(t, linkError)
 	assert.NotEmpty(t, buriedLinks)
 	for _, link := range buriedLinks {
@@ -109,7 +109,7 @@ func TestObserveProfile(t *testing.T) {
 	assert.NotNil(t, linkError, "Expected error, but there was none")
 	assert.Equal(t, 33, linkError.ErrorObject.Code, "Expected error code 33, cannot observe yourself")
 
-	followed, followedError := wh.ProfileFollowed("interface", 1)
+	followed, followedError := wh.ProfileFollowed(wh.authResponse.Login, 1)
 	assert.Nil(t, followedError)
 	assert.NotEmpty(t, followed)
 
@@ -117,7 +117,7 @@ func TestObserveProfile(t *testing.T) {
 	assert.Nil(t, observeError)
 	assert.True(t, success, "Expected observe to succeed")
 
-	followed2, followedError2 := wh.ProfileFollowed("interface", 1)
+	followed2, followedError2 := wh.ProfileFollowed(wh.authResponse.Login, 1)
 	assert.Nil(t, followedError2)
 	assert.NotEmpty(t, followed2)
 
@@ -151,7 +151,7 @@ func TestProfileFollowers(t *testing.T) {
 	defer teardownTestCase(t)
 	wh.LoginToWypok()
 
-	followers, followedError := wh.ProfileFollowers("interface", 1)
+	followers, followedError := wh.ProfileFollowers(wh.authResponse.Login, 1)
 	assert.Nil(t, followedError)
 	assert.NotEmpty(t, followers)
 

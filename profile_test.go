@@ -100,6 +100,66 @@ func TestGetProfileBuried(t *testing.T) {
 	}
 }
 
+func TestObserveProfile(t *testing.T) {
+	teardownTestCase := setupTestCase(t)
+	defer teardownTestCase(t)
+	wh.LoginToWypok()
+
+	_, linkError := wh.ObserveProfile(wh.authResponse.Login)
+	assert.NotNil(t, linkError, "Expected error, but there was none")
+	assert.Equal(t, 33, linkError.ErrorObject.Code, "Expected error code 33, cannot observe yourself")
+
+	followed, followedError := wh.ProfileFollowed("interface", 1)
+	assert.Nil(t, followedError)
+	assert.NotEmpty(t, followed)
+
+	success, observeError := wh.ObserveProfile("UncleBilly")
+	assert.Nil(t, observeError)
+	assert.True(t, success, "Expected observe to succeed")
+
+	followed2, followedError2 := wh.ProfileFollowed("interface", 1)
+	assert.Nil(t, followedError2)
+	assert.NotEmpty(t, followed2)
+
+	assert.True(t, len(followed2) > len(followed), "Expected list of followed to have more elements after observe")
+
+	unobserveSsuccess, unobserveError := wh.UnobserveProfile("UncleBilly")
+	assert.Nil(t, unobserveError)
+	assert.True(t, unobserveSsuccess, "Expected unobserve to succeed")
+}
+
+func TestBlockingAndUnblockingProfile(t *testing.T) {
+	teardownTestCase := setupTestCase(t)
+	defer teardownTestCase(t)
+	wh.LoginToWypok()
+
+	blocked, blockingError := wh.BlockProfile(wh.authResponse.Login)
+	assert.NotNil(t, blockingError, "Expected error, cannot block yourself")
+	assert.False(t, blocked)
+
+	blocked2, blockingError2 := wh.BlockProfile("Wyrewolwerowanyrewolwer")
+	assert.Nil(t, blockingError2)
+	assert.True(t, blocked2)
+
+	unblocked, unblockingError := wh.UnblockProfile("Wyrewolwerowanyrewolwer")
+	assert.Nil(t, unblockingError)
+	assert.True(t, unblocked)
+}
+
+func TestProfileFollowers(t *testing.T) {
+	teardownTestCase := setupTestCase(t)
+	defer teardownTestCase(t)
+	wh.LoginToWypok()
+
+	followers, followedError := wh.ProfileFollowers("interface", 1)
+	assert.Nil(t, followedError)
+	assert.NotEmpty(t, followers)
+
+	for _, follower := range followers {
+		assert.NotEmpty(t, follower.Login, "Follower login was empty, this is wrong")
+	}
+}
+
 func TestGettingProfileEntriesComments(t *testing.T) {
 	teardownTestCase := setupTestCase(t)
 	defer teardownTestCase(t)

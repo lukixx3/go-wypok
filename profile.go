@@ -107,6 +107,64 @@ func (wh *WykopHandler) GetProfileFavorites(username string) (links []Link, wypo
 	return
 }
 
+func (wh *WykopHandler) ObserveProfile(username string) (success bool, wypokError *WykopError) {
+	urlAddress := getProfileObserveUrl(username, wh)
+
+	responseBody := wh.sendGetRequest(urlAddress)
+	wypokError = wh.getObjectFromJson(responseBody, &responseBody)
+	success = TRUE_WYPOK_ANSWER == responseBody
+
+	return
+}
+
+func (wh *WykopHandler) UnobserveProfile(username string) (success bool, wypokError *WykopError) {
+	urlAddress := getProfileUnobserveUrl(username, wh)
+
+	responseBody := wh.sendGetRequest(urlAddress)
+	wypokError = wh.getObjectFromJson(responseBody, &responseBody)
+	success = TRUE_WYPOK_ANSWER == responseBody
+
+	return
+}
+
+func (wh *WykopHandler) BlockProfile(username string) (success bool, wypokError *WykopError) {
+	urlAddress := getProfileBlockUrl(username, wh)
+
+	responseBody := wh.sendGetRequest(urlAddress)
+	wypokError = wh.getObjectFromJson(responseBody, &responseBody)
+	success = TRUE_WYPOK_ANSWER == responseBody
+
+	return
+}
+
+func (wh *WykopHandler) UnblockProfile(username string) (success bool, wypokError *WykopError) {
+	urlAddress := getProfileUnblockUrl(username, wh)
+
+	responseBody := wh.sendGetRequest(urlAddress)
+	wypokError = wh.getObjectFromJson(responseBody, &responseBody)
+	success = TRUE_WYPOK_ANSWER == responseBody
+
+	return
+}
+
+func (wh *WykopHandler) ProfileFollowers(username string, page uint) (profiles []Profile, wypokError *WykopError) {
+	urlAddress := getProfileFollowersUrl(username, wh, page)
+
+	responseBody := wh.sendGetRequest(urlAddress)
+	wypokError = wh.getObjectFromJson(responseBody, &profiles)
+
+	return
+}
+
+func (wh *WykopHandler) ProfileFollowed(username string, page uint) (profiles []Profile, wypokError *WykopError) {
+	urlAddress := getProfileFollowedUrl(username, wh, page)
+
+	responseBody := wh.sendGetRequest(urlAddress)
+	wypokError = wh.getObjectFromJson(responseBody, &profiles)
+
+	return
+}
+
 func (wh *WykopHandler) GetProfileEntries(username string, page uint) (entries []Entry, wypokError *WykopError) {
 	urlAddress := getProfileEntriesUrl(username, wh, page)
 
@@ -153,12 +211,36 @@ func getProfileBuriedUrl(username string, wh *WykopHandler, page uint) string {
 	return fmt.Sprintf(PROFILE_BURIED, username, wh.appKey, wh.authResponse.Userkey, page)
 }
 
-func getProfileFavoritesUrl(username string, wh *WykopHandler) string {
-	return fmt.Sprintf(PROFILE_FAVORITES, username, wh.appKey, wh.authResponse.Userkey)
+func getProfileObserveUrl(username string, wh *WykopHandler) string {
+	return fmt.Sprintf(PROFILE_OBSERVE, username, wh.appKey, wh.authResponse.Userkey)
+}
+
+func getProfileUnobserveUrl(username string, wh *WykopHandler) string {
+	return fmt.Sprintf(PROFILE_UNOBSERVE, username, wh.appKey, wh.authResponse.Userkey)
+}
+
+func getProfileBlockUrl(username string, wh *WykopHandler) string {
+	return fmt.Sprintf(PROFILE_BLOCK, username, wh.authResponse.Userkey, wh.appKey)
+}
+
+func getProfileUnblockUrl(username string, wh *WykopHandler) string {
+	return fmt.Sprintf(PROFILE_UNBLOCK, username, wh.authResponse.Userkey, wh.appKey)
+}
+
+func getProfileFollowersUrl(username string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(PROFILE_FOLLOWERS, username, wh.appKey, page)
+}
+
+func getProfileFollowedUrl(username string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(PROFILE_FOLLOWED, username, wh.appKey, page)
 }
 
 func getProfileEntriesUrl(username string, wh *WykopHandler, page uint) string {
 	return fmt.Sprintf(PROFILE_ENTRIES, username, wh.appKey, wh.authResponse.Userkey, page)
+}
+
+func getProfileFavoritesUrl(username string, wh *WykopHandler) string {
+	return fmt.Sprintf(PROFILE_FAVORITES, username, wh.appKey, wh.authResponse.Userkey)
 }
 
 func getProfileEntriesCommentsUrl(username string, wh *WykopHandler, page uint) string {

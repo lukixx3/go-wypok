@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+const (
+	TRUE_WYPOK_ANSWER = "[true]"
+)
+
 type LinkComment struct {
 	Id              uint   `json:"id"`
 	Date            string `json:"date"`

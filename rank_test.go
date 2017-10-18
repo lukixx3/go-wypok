@@ -1,7 +1,6 @@
 package go_wypok
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

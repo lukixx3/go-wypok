@@ -40,18 +40,18 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
 5. Profile
  - [x] Index (GetProfile)
  - [x] Added (GetProfileAdded)
- - [ ] Groups
+ - [?] Groups (undocumented endpoint, returns nothing)
  - [x] Published (GetProfilePublished)
  - [x] Commented (GetProfileCommented)
  - [x] Comments (GetProfileComments)
  - [x] Digged (GetProfileDigged)
  - [x] Buried (GetProfileBuried)
- - [ ] Observe
- - [ ] Unobserve
- - [ ] Block
- - [ ] Unblock
- - [ ] Followers
- - [ ] Followed
+ - [x] Observe (ObserveProfile)
+ - [x] Unobserve (UnobserveProfile)
+ - [x] Block (BlockProfile)
+ - [x] Unblock (UnblockProfile)
+ - [x] Followers (ProfileFollowers)
+ - [x] Followed (ProfileFollowed)
  - [x] Favorites (GetProfileFavorites)
  - [x] Entries (GetProfileEntries)
  - [x] EntriesComments (GetProfileEntriesComments)

@@ -34,18 +34,17 @@ const (
 	MAIN_PAGE     = "https://a.wykop.pl/links/promoted/"
 	UPCOMING_PAGE = "https://a.wykop.pl/links/upcoming/"
 
-	ENTRIES_FROM_TAG = "https://a.wykop.pl/tag/entries/%s/appkey/%s/page/%d"
-
+	ENTRIES_FROM_TAG   = "https://a.wykop.pl/tag/entries/%s/appkey/%s/page/%d"
 	FAVORITES_INDEX    = "https://a.wykop.pl/favorites/index/%d/appkey/%s/userkey/%s"
 	FAVORITES_LISTS    = "https://a.wykop.pl/favorites/lists/appkey/%s/userkey/%s"
 	FAVORITES_COMMENTS = "https://a.wykop.pl/favorites/comments/appkey/%s/userkey/%s"
 	FAVORITES_ENTRIES  = "https://a.wykop.pl/favorites/entries/appkey/%s/userkey/%s"
 )
 
-func getLoginUrl(appkey string) string {
-	return fmt.Sprintf(LOGIN_URL, appkey)
+func getLoginUrl(wh *WykopHandler) string {
+	return fmt.Sprintf(LOGIN_URL, wh.appKey)
 }
 
-func getTagEntries(tag, appkey string, page uint) string {
-	return fmt.Sprintf(ENTRIES_FROM_TAG, tag, appkey, page)
+func getTagEntries(tag string, wh *WykopHandler, page uint) string {
+	return fmt.Sprintf(ENTRIES_FROM_TAG, tag, wh.appKey, page)
 }

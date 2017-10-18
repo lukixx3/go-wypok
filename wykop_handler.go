@@ -33,7 +33,7 @@ type AuthenticationResponse struct {
 
 func (wh *WykopHandler) LoginToWypok() *WykopError {
 
-	responseBody := wh.sendPostRequestForBody(getLoginUrl(wh.appKey))
+	responseBody := wh.sendPostRequestForBody(getLoginUrl(wh))
 
 	wh.authResponse = AuthenticationResponse{}
 
@@ -41,7 +41,7 @@ func (wh *WykopHandler) LoginToWypok() *WykopError {
 }
 
 func (wh *WykopHandler) GetEntriesFromTag(tag string, page uint) (tagEntries TagsEntries, wypokError *WykopError) {
-	urlAddress := getTagEntries(tag, wh.appKey, page)
+	urlAddress := getTagEntries(tag, wh, page)
 
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
 

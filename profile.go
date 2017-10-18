@@ -5,7 +5,7 @@ import (
 )
 
 type Profile struct {
-	Id              int
+	Id              uint
 	Login           string
 	Email           string
 	PublicEmail     string `json:"public_email"`

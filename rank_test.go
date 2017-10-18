@@ -1,6 +1,7 @@
 package go_wypok
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -12,7 +13,7 @@ func TestWykopHandlerGetRank(t *testing.T) {
 	profiles, wypokError := wh.GetRank()
 
 	assert.Nil(t, wypokError)
-	assert.True(t, len(profiles) > 0)
+	assert.NotEmpty(t, profiles, "List of profiles in the rank was empty")
 	for k, profile := range profiles {
 		if k == len(profiles)-1 {
 			continue
@@ -28,7 +29,7 @@ func TestWykopHandlerGetRankWithSortingType(t *testing.T) {
 	profiles, wypokError := wh.GetRankBySortingType(comment_count)
 
 	assert.Nil(t, wypokError)
-	assert.True(t, len(profiles) > 0)
+	assert.NotEmpty(t, profiles, "List of profiles in the rank was empty")
 
 	for k, profile := range profiles {
 		if k == len(profiles)-1 {

@@ -115,7 +115,7 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [x] Comments (GetFavoritesComments)
  - [x] Entries (GetFavoritesEntries)
  - [x] Lists (GetFavoritesLists)
-16. Stream
+16. Stream // in progress
  - [ ] Index
  - [ ] Hot
 17. Tag

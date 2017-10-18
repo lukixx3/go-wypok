@@ -14,7 +14,7 @@ W nawiasie podana jest metoda obsługująca dane endpoint.
 Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej nazwie (`PostEntry` i `PostEntryWithEmbeddedContent`)
 
 1. Comments
- - [x] Add (AddComment - for comment without embedded item, pass empty string ("") as embedUrl param, also for "main" comment, so a  comment which starts a discussion, pass 0 as parentId)
+ - [x] Add (AddComment - for comments without embedded item, pass empty string ("") as embedUrl param, also for "main" comment, so a  comment which starts a discussion, pass 0 as parentId)
  - [x] Plus (PlusComment)
  - [x] Minus (MinusComment)
  - [x] Edit (EditComment)

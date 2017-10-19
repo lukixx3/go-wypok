@@ -81,16 +81,16 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [ ] Index
  - [ ] Tags
  - [ ] Users
- - [ ] Observing
- - [ ] Mine
- - [ ] Received
- - [ ] Notifications
- - [ ] NotificationsCount
- - [ ] HashTagsNotifications
- - [ ] HashTagsNotificationsCount
- - [ ] ReadNotifications
- - [ ] ReadHashTagsNotifications
- - [ ] MarkAsReadNotification
+ - [ ] Observing // deprecated
+ - [ ] Mine // deprecated
+ - [ ] Received // deprecated
+ - [ ] Notifications // in progress
+ - [ ] NotificationsCount // in progress
+ - [ ] HashTagsNotifications // in progress
+ - [ ] HashTagsNotificationsCount // in progress
+ - [ ] ReadNotifications // in progress
+ - [ ] ReadHashTagsNotifications // in progress
+ - [ ] MarkAsReadNotification // in progress
 12. Entries
  - [x] Index (GetEntry)
  - [x] Add (PostEntry)

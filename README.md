@@ -115,9 +115,12 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [x] Comments (GetFavoritesComments)
  - [x] Entries (GetFavoritesEntries)
  - [x] Lists (GetFavoritesLists)
-16. Stream // in progress
- - [ ] Index
- - [ ] Hot
+16. Stream
+ - [x] Index (GetStreamEntries)
+ - [x] Hot
+   - GetStreamLast6HoursHotEntries
+   - GetStreamLast12HoursHotEntries
+   - GetStreamLast24HoursHotEntries
 17. Tag
  - [ ] Index
  - [ ] Links

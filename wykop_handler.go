@@ -24,6 +24,13 @@ type WykopHandler struct {
 	secret        string
 }
 
+type AuthenticationResponse struct {
+	Login        string
+	Email        string
+	ViolationUrl string `json:"violation_url"`
+	Userkey      string
+}
+
 func (wh *WykopHandler) LoginToWypok() *WykopError {
 
 	responseBody := wh.sendPostRequestForBody(getLoginUrl(wh))
@@ -39,49 +46,6 @@ func (wh *WykopHandler) GetEntriesFromTag(tag string, page uint) (tagEntries Tag
 	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
 
 	wypokError = wh.getObjectFromJson(responseBody, &tagEntries)
-
-	return
-}
-
-func (wh *WykopHandler) GetProfileEntries(username string, page uint) (entries []Entry, wypokError *WykopError) {
-	urlAddress := getProfileEntriesUrl(username, wh, page)
-
-	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
-
-	wypokError = wh.getObjectFromJson(responseBody, &entries)
-
-	return
-}
-
-func (wh *WykopHandler) GetProfileComments(username string, page uint) (entries []LinkComment, wypokError *WykopError) {
-	urlAddress := getProfileCommentsUrl(username, wh, page)
-
-	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
-
-	wypokError = wh.getObjectFromJson(responseBody, &entries)
-
-	return
-}
-
-func (wh *WykopHandler) GetProfileEntriesComments(username string, page uint) (entryComments []EntryComment, wypokError *WykopError) {
-	urlAddress := getProfileEntriesCommentsUrl(username, wh, page)
-
-	_, responseBody, _ := wh.preparePostRequest(urlAddress).End()
-
-	wypokError = wh.getObjectFromJson(responseBody, &entryComments)
-
-	return
-}
-
-func (wh *WykopHandler) GetProfile(username string) (profile Profile, wypokError *WykopError) {
-	urlAddress := getProfileUrl(username, wh)
-
-	_, responseBody, _ := gorequest.New().Get(urlAddress).
-		Set(contentType, mediaTypeFormType).
-		Set(apiSignHeader, wh.hashRequest(urlAddress)).
-		End()
-
-	wypokError = wh.getObjectFromJson(responseBody, &profile)
 
 	return
 }
@@ -109,6 +73,18 @@ func (wh *WykopHandler) preparePostRequest(address string) *gorequest.SuperAgent
 		Send(body)
 }
 
+func (wh *WykopHandler) sendGetRequest(address string) string {
+	body := url.Values{}
+	body.Add(accountKeyHeader, wh.connectionKey)
+
+	_, bodyResp, _ := gorequest.New().Post(address).
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(address+wh.connectionKey)).
+		Send(body).
+		End()
+	return bodyResp
+}
+
 func (wh *WykopHandler) sendGetRequestForBody(address string) string {
 	body := url.Values{}
 	body.Add(accountKeyHeader, wh.connectionKey)
@@ -118,7 +94,6 @@ func (wh *WykopHandler) sendGetRequestForBody(address string) string {
 		Set(apiSignHeader, wh.hashRequest(address+wh.connectionKey)).
 		Send(body).
 		End()
-
 	return bodyResp
 }
 

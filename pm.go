@@ -7,8 +7,7 @@ import (
 )
 
 const (
-	PM_URL_PATTERN                  = "https://a.wykop.pl/pm/%s/appkey/%s/userkey/%s"
-	PRIVATE_MESSAGE_POSITIVE_ANSWER = "[true]"
+	PM_URL_PATTERN = "https://a.wykop.pl/pm/%s/appkey/%s/userkey/%s"
 )
 
 type Conversation struct {
@@ -43,9 +42,9 @@ func (wh *WykopHandler) GetConversationsList() (conversationsList []Conversation
 	urlAddress := getConversationsListUrl(wh)
 
 	_, responseBody, _ := gorequest.New().Get(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress)).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress)).
+		End()
 	wykopError = wh.getObjectFromJson(responseBody, &conversationsList)
 
 	return
@@ -58,11 +57,11 @@ func (wh *WykopHandler) SendPrivateMessageTo(to string, message string) (succeed
 	body.Set("body", message)
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body"))).
-									Send(body).
-									End()
-	succeeded = responseBody == PRIVATE_MESSAGE_POSITIVE_ANSWER
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body"))).
+		Send(body).
+		End()
+	succeeded = responseBody == TRUE_WYPOK_ANSWER
 
 	if !succeeded {
 		wykopError = wh.getObjectFromJson(responseBody, nil)
@@ -79,11 +78,11 @@ func (wh *WykopHandler) SendPrivateMessageWithEmbeddedUrlTo(to string, message s
 	body.Set("embed", embed)
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body")+","+body.Get("embed"))).
-									Send(body).
-									End()
-	succeeded = responseBody == PRIVATE_MESSAGE_POSITIVE_ANSWER
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress+body.Get("body")+","+body.Get("embed"))).
+		Send(body).
+		End()
+	succeeded = responseBody == TRUE_WYPOK_ANSWER
 
 	if !succeeded {
 		wykopError = wh.getObjectFromJson(responseBody, nil)
@@ -96,9 +95,9 @@ func (wh *WykopHandler) GetConversation(conversation string) (messages []Private
 	urlAddress := getConversationUrl(conversation, wh)
 
 	_, responseBody, _ := gorequest.New().Get(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress)).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress)).
+		End()
 	wykopError = wh.getObjectFromJson(responseBody, &messages)
 
 	return
@@ -108,10 +107,10 @@ func (wh *WykopHandler) DeleteConversation(conversation string) (succeeded bool,
 	urlAddress := getDeleteConversationUrl(conversation, wh)
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress)).
-									End()
-	succeeded = responseBody == PRIVATE_MESSAGE_POSITIVE_ANSWER
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress)).
+		End()
+	succeeded = responseBody == TRUE_WYPOK_ANSWER
 
 	if !succeeded {
 		wykopError = wh.getObjectFromJson(responseBody, nil)
@@ -125,13 +124,13 @@ func getConversationsListUrl(wh *WykopHandler) string {
 }
 
 func getConversationUrl(conversation string, wh *WykopHandler) string {
-	return fmt.Sprintf(PM_URL_PATTERN, "Conversation/" + conversation, wh.appKey, wh.authResponse.Userkey)
+	return fmt.Sprintf(PM_URL_PATTERN, "Conversation/"+conversation, wh.appKey, wh.authResponse.Userkey)
 }
 
 func getDeleteConversationUrl(conversation string, wh *WykopHandler) string {
-	return fmt.Sprintf(PM_URL_PATTERN, "DeleteConversation/" + conversation, wh.appKey, wh.authResponse.Userkey)
+	return fmt.Sprintf(PM_URL_PATTERN, "DeleteConversation/"+conversation, wh.appKey, wh.authResponse.Userkey)
 }
 
 func getSendMessageUrl(to string, wh *WykopHandler) string {
-	return fmt.Sprintf(PM_URL_PATTERN, "SendMessage/" + to, wh.appKey, wh.authResponse.Userkey)
+	return fmt.Sprintf(PM_URL_PATTERN, "SendMessage/"+to, wh.appKey, wh.authResponse.Userkey)
 }

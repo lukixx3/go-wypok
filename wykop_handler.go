@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"github.com/parnurzeal/gorequest"
 	"net/url"
+	"fmt"
 )
 
 const (
@@ -105,6 +106,7 @@ func (wh *WykopHandler) getObjectFromJson(bodyResponse string, target interface{
 		wypokError = new(WykopError)
 		wypokError.ErrorObject.Message = "Coś poszło nie tak, wykop api nie zwróciło ani błędu ani obiektu"
 		wypokError.ErrorObject.Code = -1
+		fmt.Println(bodyResponse)
 	}
 	if wypokError.ErrorObject.Message != "" {
 		return wypokError

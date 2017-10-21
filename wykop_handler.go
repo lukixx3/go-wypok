@@ -100,8 +100,11 @@ func (wh *WykopHandler) sendGetRequestForBody(address string) string {
 func (wh *WykopHandler) getObjectFromJson(bodyResponse string, target interface{}) (wypokError *WykopError) {
 	b := []byte(bodyResponse)
 	if err := json.Unmarshal(b, &wypokError); err != nil {
-		// failed to unmarshall response to WypokError, this is actually good
-		// wypok-api returned non-error response
+		// this might happen when wypok is being ddosed/updated or Kiner is making a party in the server room
+		// this might happen when a.wykop.pl returned html, or empty response, happens.
+		wypokError = new(WykopError)
+		wypokError.ErrorObject.Message = "Coś poszło nie tak, wykop api nie zwróciło ani błędu ani obiektu"
+		wypokError.ErrorObject.Code = -1
 	}
 	if wypokError.ErrorObject.Message != "" {
 		return wypokError

@@ -34,7 +34,7 @@ type PrivateMessage struct {
 	Date            WypokShitDate `json:"date"`
 	Content         string        `json:"body"`
 	Direction       string        `json:"direction"`
-	Embed           string        `json:"embed"`
+	Embed           Embed         `json:"embed"`
 	App             string        `json:"app"`
 }
 

@@ -46,9 +46,9 @@ const (
 	FAVORITES_LISTS    = "https://a.wykop.pl/favorites/lists/appkey/%s/userkey/%s"
 	FAVORITES_COMMENTS = "https://a.wykop.pl/favorites/comments/appkey/%s/userkey/%s"
 	FAVORITES_ENTRIES  = "https://a.wykop.pl/favorites/entries/appkey/%s/userkey/%s"
-	
-	STREAM_INDEX  = "https://a.wykop.pl/stream/index/appkey/%s/page/%d"
-	STREAM_HOT  = "https://a.wykop.pl/stream/hot/appkey/%s/page/%d/period/%d"
+
+	STREAM_INDEX = "https://a.wykop.pl/stream/index/appkey/%s/page/%d"
+	STREAM_HOT   = "https://a.wykop.pl/stream/hot/appkey/%s/page/%d/period/%d"
 )
 
 func getLoginUrl(wh *WykopHandler) string {

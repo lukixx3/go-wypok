@@ -2,13 +2,13 @@ package go_wypok
 
 import (
 	"fmt"
-	"net/url"
 	"github.com/parnurzeal/gorequest"
+	"net/url"
 )
 
 const (
 	COMMENTS_BASE_URL = "https://a.wykop.pl/comments/%s/appkey/%s/userkey/%s"
-	FAKE_VOTE_VALUE = -9999
+	FAKE_VOTE_VALUE   = -9999
 )
 
 type Vote struct {
@@ -31,14 +31,14 @@ func (wh *WykopHandler) AddComment(linkId uint, parentCommentId uint, content st
 
 	if embedUrl != "" {
 		body.Set("embed", embedUrl)
-		urlToHash += ","+embedUrl
+		urlToHash += "," + embedUrl
 	}
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlToHash)).
-									Send(body).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlToHash)).
+		Send(body).
+		End()
 
 	return wh.getResponseBodyAsCommentResponse(responseBody)
 }
@@ -49,9 +49,9 @@ func (wh *WykopHandler) PlusComment(linkId uint, commentId uint) (vote Vote, wyk
 	vote = Vote{FAKE_VOTE_VALUE, FAKE_VOTE_VALUE, FAKE_VOTE_VALUE}
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress)).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress)).
+		End()
 
 	wykopError = wh.getObjectFromJson(responseBody, &vote)
 
@@ -64,9 +64,9 @@ func (wh *WykopHandler) MinusComment(linkId uint, commentId uint) (vote Vote, wy
 	vote = Vote{FAKE_VOTE_VALUE, FAKE_VOTE_VALUE, FAKE_VOTE_VALUE}
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress)).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress)).
+		End()
 
 	wykopError = wh.getObjectFromJson(responseBody, &vote)
 
@@ -81,10 +81,10 @@ func (wh *WykopHandler) EditComment(commentId uint, newContent string) (commentR
 	urlToHash := urlAddress + newContent
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlToHash)).
-									Send(body).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlToHash)).
+		Send(body).
+		End()
 
 	return wh.getResponseBodyAsCommentResponse(responseBody)
 }
@@ -93,9 +93,9 @@ func (wh *WykopHandler) DeleteComment(commentId uint) (commentResponse CommentRe
 	urlAddress := getDeleteLinkCommentUrl(commentId, wh)
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress)).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress)).
+		End()
 
 	return wh.getResponseBodyAsCommentResponse(responseBody)
 }
@@ -117,9 +117,9 @@ func getMinusLinkCommentUrl(linkId uint, commentId uint, wh *WykopHandler) strin
 }
 
 func getEditLinkCommentUrl(commentId uint, wh *WykopHandler) string {
-	return fmt.Sprintf(COMMENTS_BASE_URL, "edit/" + fmt.Sprint(commentId), wh.appKey, wh.authResponse.Userkey)
+	return fmt.Sprintf(COMMENTS_BASE_URL, "edit/"+fmt.Sprint(commentId), wh.appKey, wh.authResponse.Userkey)
 }
 
 func getDeleteLinkCommentUrl(commentId uint, wh *WykopHandler) string {
-	return fmt.Sprintf(COMMENTS_BASE_URL, "delete/" + fmt.Sprint(commentId), wh.appKey, wh.authResponse.Userkey)
+	return fmt.Sprintf(COMMENTS_BASE_URL, "delete/"+fmt.Sprint(commentId), wh.appKey, wh.authResponse.Userkey)
 }

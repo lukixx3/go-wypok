@@ -31,4 +31,3 @@ func TestLogin(t *testing.T) {
 	assert.Equal(t, "Niepoprawny klucz API", wypokError.ErrorObject.Message, "Expected login to fail and get error message")
 	assert.Equal(t, 1, wypokError.ErrorObject.Code, "Expected login to fail and get error message")
 }
-

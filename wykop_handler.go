@@ -4,9 +4,9 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"github.com/parnurzeal/gorequest"
 	"net/url"
-	"fmt"
 )
 
 const (
@@ -101,17 +101,19 @@ func (wh *WykopHandler) sendGetRequestForBody(address string) string {
 func (wh *WykopHandler) getObjectFromJson(bodyResponse string, target interface{}) (wypokError *WykopError) {
 	b := []byte(bodyResponse)
 	if err := json.Unmarshal(b, &wypokError); err != nil {
-		// this might happen when wypok is being ddosed/updated or Kiner is making a party in the server room
-		// this might happen when a.wykop.pl returned html, or empty response, happens.
+		// failed to unmarshall error, this is kinda ok, means that API worked
+	}
+	if wypokError.ErrorObject.Message != "" {
+		return wypokError
+	}
+	if targetError := json.Unmarshal(b, target); targetError != nil {
+		// this might happen when wypok is being ddosed/updated or Kiner is parting hard in the server room
+		// this might happen when a.wykop.pl returned html, or empty response, shit happens.
 		wypokError = new(WykopError)
 		wypokError.ErrorObject.Message = "Coś poszło nie tak, wykop api nie zwróciło ani błędu ani obiektu"
 		wypokError.ErrorObject.Code = -1
 		fmt.Println(bodyResponse)
 	}
-	if wypokError.ErrorObject.Message != "" {
-		return wypokError
-	}
-	json.Unmarshal(b, target)
 	return nil
 }
 

@@ -6,7 +6,7 @@ import (
 )
 
 const (
- 	BASE_NOTIFICATIONS_URL = "https://a.wykop.pl/MYWYKOP/%s/appkey/%s/userkey/%s"
+	BASE_NOTIFICATIONS_URL = "https://a.wykop.pl/MYWYKOP/%s/appkey/%s/userkey/%s"
 )
 
 type Notification struct {
@@ -28,9 +28,9 @@ func (wh *WykopHandler) getNotifications(page uint) (notifications []Notificatio
 	urlAddress := getNotificationsUrl(page, wh)
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress)).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress)).
+		End()
 
 	wykopError = wh.getObjectFromJson(responseBody, &notifications)
 
@@ -41,9 +41,9 @@ func (wh *WykopHandler) getNotificationsCount() (counter uint, wykopError *Wykop
 	urlAddress := getNotificationsCountUrl(wh)
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress)).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress)).
+		End()
 
 	wykopError = wh.getObjectFromJson(responseBody, &counter)
 
@@ -54,9 +54,9 @@ func (wh *WykopHandler) getHashTagsNotifications(page uint) (notifications []Not
 	urlAddress := getHashTagsNotificationsUrl(page, wh)
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress)).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress)).
+		End()
 
 	wykopError = wh.getObjectFromJson(responseBody, &notifications)
 
@@ -67,9 +67,9 @@ func (wh *WykopHandler) getHashTagsNotificationsCount() (counter uint, wykopErro
 	urlAddress := getHashTagsNotificationsCountUrl(wh)
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress)).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress)).
+		End()
 
 	wykopError = wh.getObjectFromJson(responseBody, &counter)
 
@@ -80,9 +80,9 @@ func (wh *WykopHandler) readNotifications() (wykopError *WykopError) {
 	urlAddress := getReadNotificationsUrl(wh)
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress)).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress)).
+		End()
 
 	wykopError = wh.getObjectFromJson(responseBody, nil)
 
@@ -93,9 +93,9 @@ func (wh *WykopHandler) readHashTagsNotifications() (wykopError *WykopError) {
 	urlAddress := getReadHashTagsNotificationsUrl(wh)
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress)).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress)).
+		End()
 
 	wykopError = wh.getObjectFromJson(responseBody, nil)
 
@@ -106,9 +106,9 @@ func (wh *WykopHandler) readNotification(notificationId uint) (result bool, wyko
 	urlAddress := getMarkNotificationAsReadUrl(notificationId, wh)
 
 	_, responseBody, _ := gorequest.New().Post(urlAddress).
-									Set(contentType, mediaTypeFormType).
-									Set(apiSignHeader, wh.hashRequest(urlAddress)).
-									End()
+		Set(contentType, mediaTypeFormType).
+		Set(apiSignHeader, wh.hashRequest(urlAddress)).
+		End()
 	result = false
 	wykopError = wh.getObjectFromJson(responseBody, &result)
 

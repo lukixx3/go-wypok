@@ -1,8 +1,8 @@
 package go_wypok
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 // As notifications are nearly impossible to be tested automatically, you need a help everytime you run tests.
@@ -55,4 +55,3 @@ func TestWykopHandler_getNotificationsUrls(t *testing.T) {
 	assert.Equal(t, readHashTagsNotificationsUrl, "https://a.wykop.pl/MYWYKOP/ReadHashTagsNotifications/appkey/abc/userkey/123")
 	assert.Equal(t, markNotificationAsReadUrl, "https://a.wykop.pl/MYWYKOP/MarkAsReadNotification/1/appkey/abc/userkey/123")
 }
-

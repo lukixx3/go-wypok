@@ -1,8 +1,8 @@
 package go_wypok
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestWykopHandler_AddComment(t *testing.T) {
@@ -102,7 +102,7 @@ func TestWykopHandler_LinkCommentsUrlBuilder(t *testing.T) {
 	wh.authResponse.Userkey = "123"
 	wh.appKey = "abc"
 
-	addCommentUrl := getAddCommentUrl(1, 2, &wh) // With parent comment
+	addCommentUrl := getAddCommentUrl(1, 2, &wh)       // With parent comment
 	addParentCommentUrl := getAddCommentUrl(1, 0, &wh) // Without parent comment
 	plusCommentUrl := getPlusLinkCommentUrl(1, 2, &wh)
 	minusCommentUrl := getMinusLinkCommentUrl(1, 2, &wh)

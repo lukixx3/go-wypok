@@ -92,6 +92,7 @@ func (wh *WykopHandler) GetProfileDigged(username string, page uint) (entries []
 
 func (wh *WykopHandler) GetProfileBuried(username string, page uint) (entries []Link, wypokError *WykopError) {
 	urlAddress := getProfileBuriedUrl(username, wh, page)
+
 	responseBody := wh.sendGetRequest(urlAddress)
 	wypokError = wh.getObjectFromJson(responseBody, &entries)
 
@@ -111,7 +112,7 @@ func (wh *WykopHandler) ObserveProfile(username string) (success bool, wypokErro
 	urlAddress := getProfileObserveUrl(username, wh)
 
 	responseBody := wh.sendGetRequest(urlAddress)
-	wypokError = wh.getObjectFromJson(responseBody, &responseBody)
+	wypokError = wh.getObjectFromJson(responseBody, new(interface{}))
 	success = TRUE_WYPOK_ANSWER == responseBody
 
 	return
@@ -121,7 +122,7 @@ func (wh *WykopHandler) UnobserveProfile(username string) (success bool, wypokEr
 	urlAddress := getProfileUnobserveUrl(username, wh)
 
 	responseBody := wh.sendGetRequest(urlAddress)
-	wypokError = wh.getObjectFromJson(responseBody, &responseBody)
+	wypokError = wh.getObjectFromJson(responseBody, new(interface{}))
 	success = TRUE_WYPOK_ANSWER == responseBody
 
 	return
@@ -131,7 +132,7 @@ func (wh *WykopHandler) BlockProfile(username string) (success bool, wypokError 
 	urlAddress := getProfileBlockUrl(username, wh)
 
 	responseBody := wh.sendGetRequest(urlAddress)
-	wypokError = wh.getObjectFromJson(responseBody, &responseBody)
+	wypokError = wh.getObjectFromJson(responseBody, new(interface{}))
 	success = TRUE_WYPOK_ANSWER == responseBody
 
 	return
@@ -141,7 +142,7 @@ func (wh *WykopHandler) UnblockProfile(username string) (success bool, wypokErro
 	urlAddress := getProfileUnblockUrl(username, wh)
 
 	responseBody := wh.sendGetRequest(urlAddress)
-	wypokError = wh.getObjectFromJson(responseBody, &responseBody)
+	wypokError = wh.getObjectFromJson(responseBody, new(interface{}))
 	success = TRUE_WYPOK_ANSWER == responseBody
 
 	return

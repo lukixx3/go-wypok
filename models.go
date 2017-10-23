@@ -10,31 +10,31 @@ const (
 )
 
 type LinkComment struct {
-	Id              uint   `json:"id"`
-	Date            string `json:"date"`
-	Author          string `json:"author"`
-	AuthorGroup     int    `json:"author_group"`
-	AuthorAvatar    string `json:"author_avatar"`
-	AuthorAvatarBig string `json:"author_avatar_big"`
-	AuthorAvatarMed string `json:"author_avatar_med"`
-	AuthorAvatarLo  string `json:"author_avatar_lo"`
-	AuthorSex       string `json:"author_sex"`
-	VoteCount       int    `json:"vote_count"`
-	VoteCountPlus   int    `json:"vote_count_plus"`
-	VoteCountMinus  int    `json:"vote_count_minus"`
-	Body            string `json:"body"`
-	Source          string `json:"source"`
-	ParentID        int    `json:"parent_id"`
-	Status          string `json:"status"`
-	CanVote         bool   `json:"can_vote"`
-	UserVote        bool   `json:"user_vote"`
-	Blocked         bool   `json:"blocked"`
-	Deleted         bool   `json:"deleted"`
-	Embed           Embed  `json:"embed"`
-	Type            string `json:"type"`
-	App             string `json:"app"`
-	UserFavorite    bool   `json:"user_favorite"`
-	ViolationURL    string `json:"violation_url"`
+	Id              uint              `json:"id"`
+	Date            string            `json:"date"`
+	Author          string            `json:"author"`
+	AuthorGroup     int               `json:"author_group"`
+	AuthorAvatar    string            `json:"author_avatar"`
+	AuthorAvatarBig string            `json:"author_avatar_big"`
+	AuthorAvatarMed string            `json:"author_avatar_med"`
+	AuthorAvatarLo  string            `json:"author_avatar_lo"`
+	AuthorSex       string            `json:"author_sex"`
+	VoteCount       int               `json:"vote_count"`
+	VoteCountPlus   int               `json:"vote_count_plus"`
+	VoteCountMinus  int               `json:"vote_count_minus"`
+	Body            string            `json:"body"`
+	Source          string            `json:"source"`
+	ParentID        int               `json:"parent_id"`
+	Status          string            `json:"status"`
+	CanVote         bool              `json:"can_vote"`
+	UserVote        WykopShitUserVote `json:"user_vote"`
+	Blocked         bool              `json:"blocked"`
+	Deleted         bool              `json:"deleted"`
+	Embed           Embed             `json:"embed"`
+	Type            string            `json:"type"`
+	App             string            `json:"app"`
+	UserFavorite    bool              `json:"user_favorite"`
+	ViolationURL    string            `json:"violation_url"`
 	Link            Link
 }
 
@@ -48,13 +48,29 @@ type WykopShitUserVote string
 // This wrapper type ensures that bool will be converted to string and string treated as string.
 func (value *WykopShitUserVote) UnmarshalJSON(data []byte) error {
 	asString := string(data)
-	if asString == "dig" {
+
+	if asString == "\"dig\"" {
 		*value = "dig"
-	} else if asString == "bury" {
-		*value = "bury"
-	} else {
+
+	} else if asString == "\"bury\"" {
+		asString = "bury"
+
+	} else if asString == "true" {
+		*value = "true"
+
+	} else if asString == "\"1\"" {
+		*value = "true"
+
+	} else if asString == "false" {
 		*value = "false"
+
+	} else if asString == "\"0\"" {
+		*value = "false"
+
+	} else {
+		*value = WykopShitUserVote(asString)
 	}
+
 	return nil
 }
 

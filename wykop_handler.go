@@ -107,6 +107,7 @@ func (wh *WykopHandler) getObjectFromJson(bodyResponse string, target interface{
 		return wypokError
 	}
 	if targetError := json.Unmarshal(b, target); targetError != nil {
+		fmt.Println("Failed to unmarshall both resposne error and target interface", targetError.Error())
 		// this might happen when wypok is being ddosed/updated or Kiner is parting hard in the server room
 		// this might happen when a.wykop.pl returned html, or empty response, shit happens.
 		wypokError = new(WykopError)

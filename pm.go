@@ -34,7 +34,7 @@ type PrivateMessage struct {
 	Date            WypokShitDate `json:"date"`
 	Content         string        `json:"body"`
 	Direction       string        `json:"direction"`
-	Embed           string        `json:"embed"`
+	Embed           Embed         `json:"embed"`
 	App             string        `json:"app"`
 }
 
@@ -64,7 +64,7 @@ func (wh *WykopHandler) SendPrivateMessageTo(to string, message string) (succeed
 	succeeded = responseBody == TRUE_WYPOK_ANSWER
 
 	if !succeeded {
-		wykopError = wh.getObjectFromJson(responseBody, nil)
+		wykopError = wh.getObjectFromJson(responseBody, new(interface{}))
 	}
 
 	return
@@ -85,7 +85,7 @@ func (wh *WykopHandler) SendPrivateMessageWithEmbeddedUrlTo(to string, message s
 	succeeded = responseBody == TRUE_WYPOK_ANSWER
 
 	if !succeeded {
-		wykopError = wh.getObjectFromJson(responseBody, nil)
+		wykopError = wh.getObjectFromJson(responseBody, new(interface{}))
 	}
 
 	return
@@ -113,7 +113,7 @@ func (wh *WykopHandler) DeleteConversation(conversation string) (succeeded bool,
 	succeeded = responseBody == TRUE_WYPOK_ANSWER
 
 	if !succeeded {
-		wykopError = wh.getObjectFromJson(responseBody, nil)
+		wykopError = wh.getObjectFromJson(responseBody, new(interface{}))
 	}
 
 	return

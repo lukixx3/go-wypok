@@ -18,7 +18,7 @@ if [ -f "$environment_filepath" ]; then
         params="$@"
     fi
 
-    go test $params
+    go -race -v -coverprofile .testCoverage.txt $params
 else
     echo "You need to create '$environment_filepath' file with"
     echo "environment variables for test uses i. e.:"

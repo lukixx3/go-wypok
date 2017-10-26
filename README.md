@@ -125,10 +125,10 @@ Jeśli endpoint ma opcjonalne pola (np. embed), istnieje druga metoda o podobnej
  - [ ] Index
  - [ ] Links
  - [x] Entries (GetEntriesFromTag)
- - [ ] Observe
- - [ ] Unobserve
- - [ ] Block
- - [ ] Unblock
+ - [ ] Observe // in progres
+ - [ ] Unobserve // in progres
+ - [ ] Block // in progres
+ - [ ] Unblock // in progres
 18. PM
  - [x] ConversationsList (GetConversationsList)
  - [x] Conversation (GetConversation)
